@@ -1,0 +1,4 @@
+{
+  "bamstatsWorkflow.bam_input": "NA12878.chrom20.ILLUMINA.bwa.CEU.low_coverage.20121211.bam",
+  "bamstatsWorkflow.mem_gb": "4"
+}
