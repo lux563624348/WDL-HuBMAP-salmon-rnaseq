@@ -4,7 +4,7 @@
 # write the WDL version number 'version 1.0' -- 1
 # possible to write 'WDL developent' as a version number as well
 
-version 1.0
+version 1.2
 
 workflow scRNA_seq_pipeline {
   input {
