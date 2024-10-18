@@ -1,8 +1,8 @@
 version: 1.2
 workflows:
   - subclass: WDL
-    primaryDescriptorPath: pipeline.wdl
+    primaryDescriptorPath: /WDL-HuBMAP-salmon-rnaseq/pipeline.wdl
     name: salmon-rnaseq-wdl
   - subclass: CWL
-    primaryDescriptorPath: pipeline.cwl
+    primaryDescriptorPath: /WDL-HuBMAP-salmon-rnaseq/pipeline.cwl
     name: salmon-rnaseq-cwl
