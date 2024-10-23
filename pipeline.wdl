@@ -3,7 +3,7 @@
 
 # write the WDL version number 'version 1.0' -- 1
 # possible to write 'WDL developent' as a version number as well
-version development
+version 1.0
 
 # create a workflow named 'HelloWorld' -- 2
 import "steps/salmon-quantification.wdl" as SalmonQuantification
