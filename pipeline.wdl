@@ -1,11 +1,8 @@
+version 1.0
 ## Use double '#' for workflow-level comments
 ## This workflow implements a one-task workflow
 
-# write the WDL version number 'version 1.0' -- 1
-# possible to write 'WDL developent' as a version number as well
-version 1.0
 
-# create a workflow named 'HelloWorld' -- 2
 import "steps/salmon-quantification.wdl" as SalmonQuantification
 import "steps/fastqc.wdl" as FastQC
 import "steps/scanpy-analysis.wdl" as ScanPyAnalysis
@@ -14,6 +11,10 @@ import "steps/squidpy-analysis.wdl" as SquidPyAnalysis
 import "steps/compute-qc-metrics.wdl" as ComputeQCMetrics
 
 workflow SalmonRNAseq {
+    meta {
+        description: "The SalmonRNAseq pipeline processes"
+    }
+
     input {
         Array[Directory] fastq_dir
         Directory? img_dir

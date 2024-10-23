@@ -1,6 +1,6 @@
 version 1.0
 
-workflow SalmonQuantification {
+task SalmonQuantification {
     input {
         Array[Directory] fastq_dir
         String assay
