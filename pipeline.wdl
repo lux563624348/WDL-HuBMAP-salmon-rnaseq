@@ -6,12 +6,12 @@
 version development
 
 # create a workflow named 'HelloWorld' -- 2
-import "./steps/salmon-quantification.wdl" as SalmonQuantification
-import "./steps/fastqc.wdl" as FastQC
-import "./steps/scanpy-analysis.wdl" as ScanPyAnalysis
-import "./steps/scvelo-analysis.wdl" as ScVeloAnalysis
-import "./steps/squidpy-analysis.wdl" as SquidPyAnalysis
-import "./steps/compute-qc-metrics.wdl" as ComputeQCMetrics
+import "steps/salmon-quantification.wdl" as SalmonQuantification
+import "steps/fastqc.wdl" as FastQC
+import "steps/scanpy-analysis.wdl" as ScanPyAnalysis
+import "steps/scvelo-analysis.wdl" as ScVeloAnalysis
+import "steps/squidpy-analysis.wdl" as SquidPyAnalysis
+import "steps/compute-qc-metrics.wdl" as ComputeQCMetrics
 
 workflow SalmonRNAseq {
     input {
