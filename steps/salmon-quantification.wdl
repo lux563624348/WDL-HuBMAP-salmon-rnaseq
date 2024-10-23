@@ -119,7 +119,7 @@ task Salmon {
     }
 
     command {
-        /opt/salmon_wrapper.py ~{assay} ~{trimmed_fastq_dir} ~{sep(" ", orig_fastq_dirs)} --threads ~{threads} ~{if defined(expected_cell_count) then "--expected-cell-count " + expected_cell_count else ""} ~{if defined(keep_all_barcodes) then "--keep-all-barcodes " + keep_all_barcodes else ""}
+        /opt/salmon_wrapper.py ~{assay} ~{trimmed_fastq_dir} ~{join(orig_fastq_dirs, " ")} --threads ~{threads} ~{if defined(expected_cell_count) then "--expected-cell-count " + expected_cell_count else ""} ~{if defined(keep_all_barcodes) && keep_all_barcodes then "--keep-all-barcodes" else ""}
     }
 }
 
