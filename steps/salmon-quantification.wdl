@@ -86,7 +86,7 @@ task AdjustBarcodes {
 
     command {
         # Command to adjust barcodes (replace with actual command)
-        /opt/adjust_barcodes.py ~{assay} directory ~{join(fastq_dir, " ")}
+        /opt/adjust_barcodes.py ~{assay} directory ~{write_tsv(select_all(fastq_dir))}
     }
 
     runtime {
@@ -108,7 +108,7 @@ task TrimReads {
 
     command {
         # Command to trim reads (replace with actual command)
-        /opt/trim_reads.py ~{assay} ~{adj_fastq_dir} ~{join(orig_fastq_dirs, " ")} --threads ~{threads}
+        /opt/trim_reads.py ~{assay} ~{adj_fastq_dir} ~{write_tsv(select_all(orig_fastq_dirs))} --threads ~{threads}
     }
 
     runtime {
@@ -133,7 +133,7 @@ task Salmon {
 
     command {
         # Command for Salmon (replace with actual command)
-        /opt/salmon_wrapper.py ~{assay} ~{trimmed_fastq_dir} ~{join(orig_fastq_dirs, " ")} --threads ~{threads} ~{if defined(expected_cell_count) then "--expected-cell-count " + expected_cell_count else ""} ~{if defined(keep_all_barcodes) && keep_all_barcodes then "--keep-all-barcodes" else ""}
+        /opt/salmon_wrapper.py ~{assay} ~{trimmed_fastq_dir} ~{write_tsv(select_all(orig_fastq_dirs))} --threads ~{threads} ~{if defined(expected_cell_count) then "--expected-cell-count " + expected_cell_count else ""} ~{if defined(keep_all_barcodes) && keep_all_barcodes then "--keep-all-barcodes" else ""}
     }
 
     runtime {
@@ -158,7 +158,7 @@ task SalmonMouse {
 
     command {
         # Command for Salmon Mouse (replace with actual command)
-        /opt/salmon_mouse_wrapper.py ~{assay} ~{trimmed_fastq_dir} ~{join(orig_fastq_dirs, " ")} --threads ~{threads} ~{if defined(expected_cell_count) then "--expected-cell-count " + expected_cell_count else ""} ~{if defined(keep_all_barcodes) && keep_all_barcodes then "--keep-all-barcodes" else ""}
+        /opt/salmon_mouse_wrapper.py ~{assay} ~{trimmed_fastq_dir} ~{write_tsv(select_all(orig_fastq_dirs))} --threads ~{threads} ~{if defined(expected_cell_count) then "--expected-cell-count " + expected_cell_count else ""} ~{if defined(keep_all_barcodes) && keep_all_barcodes then "--keep-all-barcodes" else ""}
     }
 
     runtime {
@@ -181,7 +181,7 @@ task AlevinToAnnData {
 
     command {
         # Command to convert Alevin output to AnnData
-        /opt/alevin_to_anndata.py ~{assay} ~{join(alevin_dir, " ")} --organism ~{organism}
+        /opt/alevin_to_anndata.py ~{assay} ~{write_tsv(select_all(alevin_dir))} --organism ~{organism}
     }
 
     runtime {
@@ -205,7 +205,7 @@ task AnnotateCells {
 
     command {
         # Command to annotate cells
-        /opt/annotate_cells.py ~{assay} ~{h5ad_file} ~{join(orig_fastq_dirs, " ")} ~{if defined(img_dir) then "--img_dir " + img_dir else ""} ~{if defined(metadata_dir) then "--metadata_dir " + metadata_dir else ""} ~{if defined(metadata_json) then "--metadata_json " + metadata_json else ""}
+        /opt/annotate_cells.py ~{assay} ~{h5ad_file} ~{write_tsv(select_all(orig_fastq_dirs))} ~{if defined(img_dir) then "--img_dir " + img_dir else ""} ~{if defined(metadata_dir) then "--metadata_dir " + metadata_dir else ""} ~{if defined(metadata_json) then "--metadata_json " + metadata_json else ""}
     }
 
     runtime {
