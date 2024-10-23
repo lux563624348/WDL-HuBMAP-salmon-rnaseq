@@ -2,32 +2,34 @@ version 1.0
 
 workflow SalmonQuantification {
     input {
-        Array[Directory] fastq_dir
+        Array[File] fastq_dir
         String assay
         Int threads = 1
         Int? expected_cell_count
         Boolean? keep_all_barcodes
-        Directory? img_dir
-        Directory? metadata_dir
+        Array[File]? img_dir
+        Array[File]? metadata_dir
         String? organism
     }
 
     call AdjustBarcodes {
-        input:
+        input {
             fastq_dir = fastq_dir,
             assay = assay
+        }
     }
 
     call TrimReads {
-        input:
+        input {
             orig_fastq_dirs = fastq_dir,
             adj_fastq_dir = AdjustBarcodes.adj_fastq_dir,
             assay = assay,
             threads = threads
+        }
     }
 
     call Salmon {
-        input:
+        input {
             orig_fastq_dirs = fastq_dir,
             trimmed_fastq_dir = TrimReads.trimmed_fastq_dir,
             assay = assay,
@@ -35,10 +37,11 @@ workflow SalmonQuantification {
             expected_cell_count = expected_cell_count,
             keep_all_barcodes = keep_all_barcodes,
             organism = organism
+        }
     }
 
     call SalmonMouse {
-        input:
+        input {
             orig_fastq_dirs = fastq_dir,
             trimmed_fastq_dir = TrimReads.trimmed_fastq_dir,
             assay = assay,
@@ -46,23 +49,26 @@ workflow SalmonQuantification {
             expected_cell_count = expected_cell_count,
             keep_all_barcodes = keep_all_barcodes,
             organism = organism
+        }
     }
 
     call AlevinToAnnData {
-        input:
+        input {
             assay = assay,
             alevin_dir = [Salmon.output_dir, SalmonMouse.output_dir],
             organism = organism
+        }
     }
 
     call AnnotateCells {
-        input:
+        input {
             orig_fastq_dirs = fastq_dir,
             assay = assay,
             h5ad_file = AlevinToAnnData.expr_h5ad,
             img_dir = img_dir,
             metadata_dir = metadata_dir,
             metadata_json = AdjustBarcodes.metadata_json
+        }
     }
 
     output {
@@ -75,7 +81,7 @@ workflow SalmonQuantification {
 
 task AdjustBarcodes {
     input {
-        Array[Directory] fastq_dir
+        Array[File] fastq_dir
         String assay
     }
 
@@ -96,7 +102,7 @@ task AdjustBarcodes {
 
 task TrimReads {
     input {
-        Array[Directory] orig_fastq_dirs
+        Array[File] orig_fastq_dirs
         Directory adj_fastq_dir
         String assay
         Int threads
@@ -118,7 +124,7 @@ task TrimReads {
 
 task Salmon {
     input {
-        Array[Directory] orig_fastq_dirs
+        Array[File] orig_fastq_dirs
         Directory trimmed_fastq_dir
         String assay
         Int threads
@@ -143,7 +149,7 @@ task Salmon {
 
 task SalmonMouse {
     input {
-        Array[Directory] orig_fastq_dirs
+        Array[File] orig_fastq_dirs
         Directory trimmed_fastq_dir
         String assay
         Int threads
@@ -169,7 +175,7 @@ task SalmonMouse {
 task AlevinToAnnData {
     input {
         String assay
-        Array[Directory] alevin_dir
+        Array[File] alevin_dir
         String? organism
     }
 
@@ -191,11 +197,11 @@ task AlevinToAnnData {
 
 task AnnotateCells {
     input {
-        Array[Directory] orig_fastq_dirs
+        Array[File] orig_fastq_dirs
         String assay
         File h5ad_file
-        Directory? img_dir
-        Directory? metadata_dir
+        Array[File]? img_dir
+        Array[File]? metadata_dir
         File? metadata_json
     }
 
@@ -205,7 +211,7 @@ task AnnotateCells {
 
     command {
         # Command to annotate cells
-        /opt/annotate_cells.py ~{assay} ~{h5ad_file} ~{write_tsv(select_all(orig_fastq_dirs))} ~{if defined(img_dir) then "--img_dir " + img_dir else ""} ~{if defined(metadata_dir) then "--metadata_dir " + metadata_dir else ""} ~{if defined(metadata_json) then "--metadata_json " + metadata_json else ""}
+        /opt/annotate_cells.py ~{assay} ~{h5ad_file} ~{write_tsv(select_all(orig_fastq_dirs))} ~{if defined(img_dir) then "--img_dir " + write_tsv(select_all(img_dir)) else ""} ~{if defined(metadata_dir) then "--metadata_dir " + write_tsv(select_all(metadata_dir)) else ""} ~{if defined(metadata_json) then "--metadata_json " + metadata_json else ""}
     }
 
     runtime {
