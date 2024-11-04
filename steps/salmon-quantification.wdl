@@ -28,11 +28,11 @@ workflow SalmonQuantification {
       Directory adj_fastq = "adj_fastq"
       Optional[File] metadata_json = "metadata.json"
     }
-    command {
-      """
+
+    command <<<
       /opt/adjust_barcodes.py {assay} {fastq} {write_lines(adj_fastq)}
-      """
-    }
+      >>>
+
     runtime {
       docker "your_container_image"
     }
@@ -46,11 +46,11 @@ workflow SalmonQuantification {
     output {
       Directory trimmed_fastq = "trimmed"
     }
-    command {
-      """
+    
+    command <<<
       /opt/trim_reads.py {assay} {AdjustBarcodes.adj_fastq[fastq]} {fastq} --threads {threads}
-      """
-    }
+     >>>
+
     runtime {
       docker "your_container_image"
     }
@@ -66,13 +66,12 @@ workflow SalmonQuantification {
       output {
         Directory output_dir = "salmon_out"
       }
-      command {
-        """
+      command <<<
         /opt/salmon_wrapper.py {assay} {TrimReads.trimmed_fastq[fastq]} {fastq_dir} --threads {threads} 
           ${if defined expected_cell_count then ' --expected-cell-count ' + expected_cell_count else ''}
           ${if defined keep_all_barcodes && keep_all_barcodes then ' --keep-all-barcodes' else ''}
-        """
-      }
+        >>>
+
       runtime {
         docker "your_container_image"
       }
@@ -85,13 +84,13 @@ workflow SalmonQuantification {
       output {
         Directory output_dir = "salmon_mouse_out"
       }
-      command {
-        """
+
+      command <<<
         /opt/salmon_mouse_wrapper.py {assay} {TrimReads.trimmed_fastq[fastq]} {fastq_dir} --threads {threads} 
           ${if defined expected_cell_count then ' --expected-cell-count ' + expected_cell_count else ''}
           ${if defined keep_all_barcodes && keep_all_barcodes then ' --keep-all-barcodes' else ''}
-        """
-      }
+        >>>
+
       runtime {
         docker "your_container_image"
       }
@@ -110,11 +109,11 @@ workflow SalmonQuantification {
       Optional[File] raw_expr_h5ad = "raw_expr.h5ad"
       File genome_build_json = "genome_build.json"
     }
-    command {
-      """
+
+    command <<<
       /opt/alevin_to_anndata.py {assay} {write_lines(alefin_dir)} --organism {organism}
-      """
-    }
+      >>>
+
     runtime {
       docker "your_container_image"
     }
@@ -133,14 +132,12 @@ workflow SalmonQuantification {
     output {
       File annotated_h5ad_file = "annotated_expr.h5ad"
     }
-    command {
-      """
+    command <<<
       /opt/annotate_cells.py {assay} {h5ad_file} {write_tsv(select_all(orig_fastq_dirs))} 
         ${if defined img_dir then ' --img_dir ' + write_tsv(select_all(img_dir)) else ''}
         ${if defined metadata_dir then ' --metadata_dir ' + write_tsv(select_all(metadata_dir)) else ''}
         ${if defined metadata_json then ' --metadata_json ' + metadata_json else ''}
-      """
-    }
+      >>>
     runtime {
       docker "your_container_image"
     }

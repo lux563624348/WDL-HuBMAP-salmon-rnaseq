@@ -16,15 +16,21 @@ workflow SalmonRNAseq {
     }
 
     input {
-        Array[Directory] fastq_dir
-        Directory? img_dir
-        Directory? metadata_dir
-        String assay
-        Int threads
+        File fastq1
+        File fastq2
+        Int threads = 8
         Int? expected_cell_count
         Boolean? keep_all_barcodes
     }
 
+    parameter_meta {
+        fastq1: "fastq1"
+        fastq2: "fastq2"
+        threads: "# cpu for compute"
+        expected_cell_count: "expected_cell_count"
+        keep_all_barcodes: "keep_all_barcodes"
+    }
+    
     call SalmonQuantification.SalmonQuantification as SalmonQuantificationCall {
         input:
             fastq_dir = fastq_dir,

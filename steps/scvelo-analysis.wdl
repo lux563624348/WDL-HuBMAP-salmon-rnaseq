@@ -15,7 +15,7 @@ task ScVeloAnalysis {
         container: "hubmap/scrna-analysis:latest"
     }
 
-    command {
+    command <<<
         /opt/scvelo_analysis.py ~{spliced_h5ad_file} ~{assay_name}
-    }
+    >>>
 }

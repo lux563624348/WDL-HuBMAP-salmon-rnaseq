@@ -1,4 +1,4 @@
-version development
+version 1.0
 
 task FastQC {
     input {
@@ -14,7 +14,7 @@ task FastQC {
         container: "hubmap/scrna-analysis:latest"
     }
 
-    command {
+    command <<<
         /opt/fastqc_wrapper.py ~{fastq_dir} ~{threads}
-    }
+    >>>
 }

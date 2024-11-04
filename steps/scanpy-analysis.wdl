@@ -20,7 +20,7 @@ task ScanPyAnalysis {
         container: "hubmap/scrna-analysis:latest"
     }
 
-    command {
+    command <<<
         /opt/scanpy_entry_point.py ~{assay} ~{h5ad_file}
-    }
+    >>>
 }

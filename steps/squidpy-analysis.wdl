@@ -21,7 +21,7 @@ task SquidPyAnalysis {
         container: "hubmap/squidpy-analysis:latest"
     }
 
-    command {
+    command <<<
         /opt/squidpy_entry_point.py ~{assay} ~{h5ad_file} ~{img_dir}
-    }
+    >>>
 }

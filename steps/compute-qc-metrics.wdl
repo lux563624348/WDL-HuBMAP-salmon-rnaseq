@@ -17,7 +17,7 @@ task ComputeQCMetrics {
         container: "hubmap/scrna-analysis:latest"
     }
 
-    command {
+    command <<<
         /opt/compute_qc_metrics.py ~{assay} ~{h5ad_primary} ~{h5ad_secondary} ~{salmon_dir}
-    }
+    >>>
 }
