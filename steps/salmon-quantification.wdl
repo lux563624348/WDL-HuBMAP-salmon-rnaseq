@@ -118,8 +118,8 @@ task salmon {
         String trimmed_fastqs
         String assay
         Int threads
-        Int? expected_cell_count
-        Boolean? keep_all_barcodes
+        String? expected_cell_count
+        String? keep_all_barcodes
         String? organism
     }
 
@@ -129,7 +129,7 @@ task salmon {
 
     command {
         # Command for Salmon quantification (human)
-        /opt/salmon_wrapper.py ~{assay} ~{trimmed_fastqs} ~{sep=" " orig_fastqss} --threads ~{threads} ~{if defined(expected_cell_count) then "--expected-cell-count " + string(expected_cell_count) else ""} ~{if defined(keep_all_barcodes) then "--keep-all-barcodes " + string(keep_all_barcodes) else ""}
+        /opt/salmon_wrapper.py ~{assay} ~{trimmed_fastqs} ~{sep=" " orig_fastqss} --threads ~{threads} ~{if defined(expected_cell_count) then "--expected-cell-count " + expected_cell_count else ""} ~{if defined(keep_all_barcodes) then "--keep-all-barcodes " + keep_all_barcodes else ""}
     }
 
     runtime {
@@ -167,7 +167,7 @@ task annotate_cells {
         File h5ad_file
         String img_dir
         String metadata_dir
-        File metadata_json
+        String metadata_json
     }
 
     output {
@@ -176,7 +176,7 @@ task annotate_cells {
 
     command {
         # Command to annotate cells in the AnnData file
-        /opt/annotate_cells.py ~{assay} ~{h5ad_file} ~{sep=" " orig_fastqss} ~{if defined(img_dir) then "--img_dir " + img_dir else ""} ~{if defined(metadata_dir) then "--metadata_dir " + metadata_dir else ""} ~{if defined(metadata_json) then "--metadata_json " + string(metadata_json) else ""}
+        /opt/annotate_cells.py ~{assay} ~{h5ad_file} ~{sep=" " orig_fastqss} ~{if defined(img_dir) then "--img_dir " + img_dir else ""} ~{if defined(metadata_dir) then "--metadata_dir " + metadata_dir else ""} ~{if defined(metadata_json) then "--metadata_json " + metadata_json else ""}
     }
 
     runtime {
