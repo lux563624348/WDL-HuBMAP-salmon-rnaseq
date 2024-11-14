@@ -1,0 +1,21 @@
+{
+  "error": "RunFailed",
+  "workflow": "RunSalmonRNAseq",
+  "run": "RunSalmonRNAseq",
+  "dir": "/home/xli_p14/github/WDL-HuBMAP-salmon-rnaseq/test/20241114_164218_RunSalmonRNAseq",
+  "cause": {
+    "error": "Terminated",
+    "run": "call-fastqc-1-R2",
+    "dir": "/home/xli_p14/github/WDL-HuBMAP-salmon-rnaseq/test/20241114_164218_RunSalmonRNAseq/call-fastqc-1-R2",
+    "pos": {
+      "source": "/home/xli_p14/github/WDL-HuBMAP-salmon-rnaseq/steps/fastqc.wdl",
+      "line": 3,
+      "column": 1
+    }
+  },
+  "pos": {
+    "source": "/home/xli_p14/github/WDL-HuBMAP-salmon-rnaseq/pipeline.wdl",
+    "line": 8,
+    "column": 1
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "error": "RunFailed",
+  "task": "adjust_barcodes",
+  "run": "call-adjust_barcodes",
+  "dir": "/home/xli_p14/github/WDL-HuBMAP-salmon-rnaseq/test/20241114_164218_RunSalmonRNAseq/call-SalmonQuantificationCall-1-R2/call-adjust_barcodes",
+  "cause": {
+    "error": "Terminated",
+    "run": "call-adjust_barcodes",
+    "dir": "/home/xli_p14/github/WDL-HuBMAP-salmon-rnaseq/test/20241114_164218_RunSalmonRNAseq/call-SalmonQuantificationCall-1-R2/call-adjust_barcodes",
+    "pos": {
+      "source": "/home/xli_p14/github/WDL-HuBMAP-salmon-rnaseq/steps/salmon-quantification.wdl",
+      "line": 72,
+      "column": 1
+    }
+  },
+  "pos": {
+    "source": "/home/xli_p14/github/WDL-HuBMAP-salmon-rnaseq/steps/salmon-quantification.wdl",
+    "line": 72,
+    "column": 1
+  }
+}
