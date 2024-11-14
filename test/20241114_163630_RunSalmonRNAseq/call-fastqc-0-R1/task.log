@@ -1,0 +1,1 @@
+2024-11-14 16:36:30.583 wdl.w:RunSalmonRNAseq.t:call-fastqc-0-R1 NOTICE task setup :: name: "fastqc", source: "steps/fastqc.wdl", line: 3, column: 1, dir: "/home/xli_p14/github/WDL-HuBMAP-salmon-rnaseq/test/20241114_163630_RunSalmonRNAseq/call-fastqc-0-R1", thread: 140543929603648
