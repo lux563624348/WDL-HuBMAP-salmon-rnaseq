@@ -1,145 +1,185 @@
-version 1.0
+version 1.1
 
-workflow SalmonQuantification {
-  
-  # Define inputs
-  input {
-    Array[File] fastq_dir
-    String assay
-    Int threads = 1
-    Optional[Int] expected_cell_count
-    Optional[Boolean] keep_all_barcodes
-    Optional[Array[File]] img_dir
-    Optional[Array[File]] metadata_dir
-    Optional[String] organism
-  }
-
-  # Define outputs
-  output {
-    Directory salmon_output = {Salmon.output_dir, SalmonMouse.output_dir}[0]
-    File count_matrix_h5ad = AnnotateCells.annotated_h5ad_file
-    Optional[File] raw_count_matrix = AlevinToAnnData.raw_expr_h5ad
-    File genome_build_json = AlevinToAnnData.genome_build_json
-  }
-
-  # Call AdjustBarcodes task
-  scatter (fastq in fastq_dir) {
-    output {
-      Directory adj_fastq = "adj_fastq"
-      Optional[File] metadata_json = "metadata.json"
-    }
-
-    command <<<
-      /opt/adjust_barcodes.py {assay} {fastq} {write_lines(adj_fastq)}
-      >>>
-
-    runtime {
-      docker "your_container_image"
-    }
-  }
-
-  # Call TrimReads task
-  scatter (fastq in fastq_dir) {
+workflow salmon_quantification {
     input {
-      Directory adj_fastq = AdjustBarcodes.adj_fastq[fastq]
+        Array[File] fastqs
+        String assay
+        Int threads = 1
+        Int? expected_cell_count
+        Boolean? keep_all_barcodes
+        String? img_dir
+        String? metadata_dir
+        String? organism
     }
+
+    # Step 1: Adjust Barcodes
+    call adjust_barcodes {
+        input:
+            fastqs = fastqs,
+            assay = assay
+    }
+
+    # Step 2: Trim Reads
+    call trim_reads {
+        input:
+            orig_fastqss = fastqs,
+            adj_fastqs = adjust_barcodes.adj_fastqs,
+            assay = assay,
+            threads = threads
+    }
+
+    # Step 3: Salmon Quantification
+    call salmon {
+        input:
+            orig_fastqss = fastqs,
+            trimmed_fastqs = trim_reads.trimmed_fastqs,
+            assay = assay,
+            threads = threads,
+            expected_cell_count = expected_cell_count,
+            keep_all_barcodes = keep_all_barcodes,
+            organism = organism
+    }
+
+    # Step 4: Convert Alevin to AnnData
+    call alevin_to_anndata {
+        input:
+            assay = assay,
+            alevin_dir = select_first([salmon.output_dir]),
+            organism = organism
+    }
+
+    # Step 5: Annotate Cells
+    call annotate_cells {
+        input:
+            orig_fastqss = fastqs,
+            assay = assay,
+            h5ad_file = alevin_to_anndata.expr_h5ad,
+            img_dir = select_first([img_dir, "default_value"]),
+            metadata_dir = select_first([metadata_dir, "default_value"]),
+            metadata_json = select_first([adjust_barcodes.metadata_json, "default_value"])
+    }
+
     output {
-      Directory trimmed_fastq = "trimmed"
+        File salmon_output = salmon.output_dir
+        File count_matrix_h5ad = alevin_to_anndata.expr_h5ad
+        File? raw_count_matrix = alevin_to_anndata.raw_expr_h5ad
+        File genome_build_json = alevin_to_anndata.genome_build_json
     }
-    
-    command <<<
-      /opt/trim_reads.py {assay} {AdjustBarcodes.adj_fastq[fastq]} {fastq} --threads {threads}
-     >>>
+}
 
-    runtime {
-      docker "your_container_image"
-    }
-  }
+# Task Definitions
 
-  # Call Salmon and SalmonMouse tasks in parallel
-  work {
-    call Salmon {
-      input {
-        Array[File] orig_fastq_dirs = fastq_dir
-        Directory trimmed_fastq = TrimReads.trimmed_fastq[fastq]
-      }
-      output {
-        Directory output_dir = "salmon_out"
-      }
-      command <<<
-        /opt/salmon_wrapper.py {assay} {TrimReads.trimmed_fastq[fastq]} {fastq_dir} --threads {threads} 
-          ${if defined expected_cell_count then ' --expected-cell-count ' + expected_cell_count else ''}
-          ${if defined keep_all_barcodes && keep_all_barcodes then ' --keep-all-barcodes' else ''}
-        >>>
-
-      runtime {
-        docker "your_container_image"
-      }
-    }
-    call SalmonMouse {
-      input {
-        Array[File] orig_fastq_dirs = fastq_dir
-        Directory trimmed_fastq = TrimReads.trimmed_fastq[fastq]
-      }
-      output {
-        Directory output_dir = "salmon_mouse_out"
-      }
-
-      command <<<
-        /opt/salmon_mouse_wrapper.py {assay} {TrimReads.trimmed_fastq[fastq]} {fastq_dir} --threads {threads} 
-          ${if defined expected_cell_count then ' --expected-cell-count ' + expected_cell_count else ''}
-          ${if defined keep_all_barcodes && keep_all_barcodes then ' --keep-all-barcodes' else ''}
-        >>>
-
-      runtime {
-        docker "your_container_image"
-      }
-    }
-  }
-
-  # Call AlevinToAnnData task with combined outputs from Salmon and SalmonMouse
-  task AlevinToAnnData {
+task adjust_barcodes {
     input {
-      String assay
-      Array[File] alevin_dir = {Salmon.output_dir, SalmonMouse.output_dir}
-      Optional[String] organism
-    }
-    output {
-      File expr_h5ad = "expr.h5ad"
-      Optional[File] raw_expr_h5ad = "raw_expr.h5ad"
-      File genome_build_json = "genome_build.json"
+        Array[File] fastqs
+        String assay
     }
 
-    command <<<
-      /opt/alevin_to_anndata.py {assay} {write_lines(alefin_dir)} --organism {organism}
-      >>>
+    output {
+        String adj_fastqs = "adj_fastq"
+        File? metadata_json = "metadata.json"
+    }
+
+    command {
+        # Command for barcode adjustment
+        /opt/adjust_barcodes.py ~{assay} array[file] ~{sep(" ", fastqs)}
+    }
 
     runtime {
-      docker "your_container_image"
+        container: "hubmap/scrna-barcode-adj:latest"
     }
-  }
+}
 
-  # Call AnnotateCells task
-  task AnnotateCells {
+task trim_reads {
     input {
-      Array[File] orig_fastq_dirs
-      String assay
-      File h5ad_file
-      Optional[Array[File]] img_dir
-      Optional[Array[File]] metadata_dir
-      Optional[File] metadata_json
+        Array[File] orig_fastqss
+        String adj_fastqs
+        String assay
+        Int threads
     }
+
     output {
-      File annotated_h5ad_file = "annotated_expr.h5ad"
+        String trimmed_fastqs = "trimmed"
     }
-    command <<<
-      /opt/annotate_cells.py {assay} {h5ad_file} {write_tsv(select_all(orig_fastq_dirs))} 
-        ${if defined img_dir then ' --img_dir ' + write_tsv(select_all(img_dir)) else ''}
-        ${if defined metadata_dir then ' --metadata_dir ' + write_tsv(select_all(metadata_dir)) else ''}
-        ${if defined metadata_json then ' --metadata_json ' + metadata_json else ''}
-      >>>
+
+    command {
+        # Command for trimming reads
+        /opt/trim_reads.py ~{assay} ~{adj_fastqs} ~{sep(" ", orig_fastqss)}
+    }
+
     runtime {
-      docker "your_container_image"
+        container: "hubmap/scrna-trim-reads:latest"
     }
-  }
+}
+
+task salmon {
+    input {
+        Array[File] orig_fastqss
+        String trimmed_fastqs
+        String assay
+        Int threads
+        Int? expected_cell_count
+        Boolean? keep_all_barcodes
+        String? organism
+    }
+
+    output {
+        String output_dir = "salmon_out"
+    }
+
+    command {
+        # Command for Salmon quantification (human)
+        /opt/salmon_wrapper.py ~{assay} ~{trimmed_fastqs} ~{sep(" ", orig_fastqss)} --threads ~{threads} ~{if defined(expected_cell_count) then "--expected-cell-count " + expected_cell_count else ""} ~{if defined(keep_all_barcodes) then "--keep-all-barcodes " + keep_all_barcodes else ""}
+    }
+
+    runtime {
+        container: "hubmap/salmon-grch38:latest"
+    }
+}
+
+task alevin_to_anndata {
+    input {
+        String assay
+        String alevin_dir
+        String? organism
+    }
+
+    output {
+        File? raw_expr_h5ad = "raw_expr.h5ad"
+        File expr_h5ad = "expr.h5ad"
+        File genome_build_json = "genome_build.json"
+    }
+
+    command {
+        # Command to convert Alevin output to AnnData object
+        /opt/alevin_to_anndata.py ~{assay} ~{alevin_dir}
+    }
+
+    runtime {
+        container: "hubmap/scrna-analysis:latest"
+    }
+}
+
+task annotate_cells {
+    input {
+        Array[File] orig_fastqss
+        String assay
+        File h5ad_file
+        String img_dir
+        String metadata_dir
+        File metadata_json
+    }
+
+    output {
+        File annotated_h5ad_file = "expr.h5ad"
+    }
+
+    command {
+        # Command to annotate cells in the AnnData file
+        /opt/annotate_cells.py ~{assay} ~{h5ad_file} ~{sep(" ", orig_fastqss)} ~{if defined(img_dir) then "--img_dir " + img_dir else ""} ~{if defined(metadata_dir) then "--metadata_dir " + metadata_dir else ""} ~{if defined(metadata_json) then "--metadata_json " + metadata_json else ""}
+    }
+
+    runtime {
+        container: "hubmap/scrna-analysis:latest"
+    }
 }

@@ -1,17 +1,38 @@
 version 1.0
 
+workflow FastqcWF {
+	input {
+		Array[File] fastqs
+		File? limits
+	}
+
+	call fastqc {
+		input:
+			fastqs = fastqs,
+			limits = limits
+	}
+
+	output {
+		Array[File] reports = fastqc.reports
+	}
+
+	meta {
+		author: "Ash O'Farrell"
+	}
+}
+
 task fastqc {
 	input {
 		Array[File] fastqs
 		File? limits
 		Int addldisk = 10
-		Int threads = 4
-		Int mem_gb = 8
+		Int cpu = 4
+		Int memory = 8
 		Int preempt = 1 
 	}
 	Int finalDiskSize = addldisk + ceil(size(fastqs, "GB"))
 
-	command {
+	command <<<
 		mkdir outputs
 		if [[ "~{limits}" != "" ]]
 		then
@@ -19,17 +40,18 @@ task fastqc {
 		else
 			fastqc -o outputs ~{sep=" " fastqs}
 		fi
-	}
+	>>>
 
 	runtime {
-		cpu: threads
-		docker: "hubmap/scrna-analysis:latest"
+		cpu: cpu
+		docker: "biocontainers/fastqc:v0.11.9_cv8"
 		disks: "local-disk " + finalDiskSize + " SSD"
-		memory: "${mem_gb} GB"
+		memory: "${memory} GB"
 		preemptible: "${preempt}"
 	}
 
 	output {
 		Array[File] reports = glob("outputs/*.html")
-	}	
+	}
+	
 }
