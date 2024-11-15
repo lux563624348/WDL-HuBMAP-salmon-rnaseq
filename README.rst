@@ -9,20 +9,20 @@ HuBMAP scRNA-seq pipeline: Salmon, Scanpy, scVelo
 Overview
 --------
 
-The HuBMAP scRNA-seq pipeline is built on Salmon, Scanpy, and scVelo, and is
-implemented as a CWL workflow wrapping command-line tools encapsulated in
+The HuBMAP scRNA-seq pipeline is built on Salmon, Scanpy, and scVelo, and this is 
+implemented as a WDL workflow wrapping command-line tools encapsulated in
 Docker containers.
 
 Requirements
 ------------
 
-Running the pipeline requires a CWL workflow execution engine and container
-runtime; we recommend Docker and the ``cwltool`` reference implementation.
-``cwltool`` is written in Python and can be installed into a sufficiently
-recent Python environment with ``pip install cwltool``. Afterward, clone this
+Running the pipeline requires a WDL workflow execution engine and container
+runtime; we recommend Docker and the ``miniwdl`` reference implementation.
+``miniwdl`` is written in Python and can be installed into a sufficiently
+recent Python environment with ``pip3 install miniwdl``. Afterward, clone this
 repository, check out a tag, and invoke the pipeline as::
 
-  cwltool pipeline.cwl --assay ASSAY --fastq_dir FASTQ_DIR --threads THREADS
+  miniwdl pipeline.wdl -i test.wdl.json
 
 At least 28GB memory is required for the Salmon quantification step; this
 memory usage is due to inclusion of the entire GRCh38 reference genome as
