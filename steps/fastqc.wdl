@@ -22,11 +22,11 @@ task fastqc {
 	}
 
 	runtime {
-		threads: threads
+		#threads: threads
 		docker: "hubmap/scrna-analysis:latest"
-		disks: "local-disk " + finalDiskSize + " SSD"
-		memory: "${mem_gb} GB"
-		preemptible: "${preempt}"
+		#disks: "local-disk " + finalDiskSize + " SSD"
+		#memory: "${mem_gb} GB"
+		#preemptible: "${preempt}"
 	}
 
 	output {

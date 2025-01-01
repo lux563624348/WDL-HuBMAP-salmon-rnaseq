@@ -5,6 +5,6 @@
 *.zarr
 .idea/
 __pycache__/
-out/
-cromwell-input/
-cromwell-workflow-logs/
+out/*
+cromwell-input/*
+cromwell-workflow-logs/*
