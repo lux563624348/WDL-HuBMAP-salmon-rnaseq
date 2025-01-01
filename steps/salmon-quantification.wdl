@@ -97,7 +97,7 @@ task adjust_barcodes {
     }
 
     runtime {
-        container: "hubmap/scrna-barcode-adj:latest"
+        docker: "hubmap/scrna-barcode-adj:latest"
     }
 }
 
@@ -118,7 +118,7 @@ task trim_reads {
     }
 
     runtime {
-        container: "hubmap/scrna-trim-reads:latest"
+        docker: "hubmap/scrna-trim-reads:latest"
     }
 }
 
@@ -144,7 +144,7 @@ task salmon {
     }
 
     runtime {
-        container: "hubmap/salmon-grch38:latest"
+        docker: "hubmap/salmon-grch38:latest"
     }
 }
 
@@ -167,7 +167,7 @@ task alevin_to_anndata {
     }
 
     runtime {
-        container: "hubmap/scrna-analysis:latest"
+        docker: "hubmap/scrna-analysis:latest"
     }
 }
 
@@ -191,6 +191,6 @@ task annotate_cells {
     }
 
     runtime {
-        container: "hubmap/scrna-analysis:latest"
+        docker: "hubmap/scrna-analysis:latest"
     }
 }
