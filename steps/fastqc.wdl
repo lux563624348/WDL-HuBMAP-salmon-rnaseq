@@ -22,7 +22,7 @@ task fastqc {
 	}
 
 	runtime {
-		cpu: threads
+		threads: threads
 		docker: "hubmap/scrna-analysis:latest"
 		disks: "local-disk " + finalDiskSize + " SSD"
 		memory: "${mem_gb} GB"

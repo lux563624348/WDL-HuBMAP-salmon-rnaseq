@@ -1,2 +1,0 @@
-2024-11-14 16:42:18.664 wdl.w:RunSalmonRNAseq.t:call-fastqc-0-R1 NOTICE task setup :: name: "fastqc", source: "steps/fastqc.wdl", line: 3, column: 1, dir: "/home/xli_p14/github/WDL-HuBMAP-salmon-rnaseq/test/20241114_164218_RunSalmonRNAseq/call-fastqc-0-R1", thread: 140317848233536
-2024-11-14 16:42:19.834 wdl.w:RunSalmonRNAseq.t:call-fastqc-0-R1 ERROR task fastqc (steps/fastqc.wdl Ln 3 Col 1) failed :: dir: "/home/xli_p14/github/WDL-HuBMAP-salmon-rnaseq/test/20241114_164218_RunSalmonRNAseq/call-fastqc-0-R1", error: "Terminated"

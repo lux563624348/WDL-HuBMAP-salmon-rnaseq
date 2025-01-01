@@ -1,7 +1,0 @@
-{
-  "fastqs": [
-    "/home/xli_p14/github/WDL-HuBMAP-salmon-rnaseq/test/R1.fastq.gz"
-  ],
-  "limits": null,
-  "threads": 4
-}

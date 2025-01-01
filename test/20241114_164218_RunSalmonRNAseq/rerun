@@ -1,1 +1,0 @@
-pushd /home/xli_p14/github/WDL-HuBMAP-salmon-rnaseq/test && miniwdl run ../pipeline.wdl -i test.wdl.json; popd

@@ -12,22 +12,33 @@ workflow RunSalmonRNAseq {
     }
 
 	input {
+        Int threads = 1
+        Int mem_gb
         File fastq1
         File fastq2
-        Int threads = 1
-        String assay = "scrnaseq"
-        String? organism
+        String species
+        String assay
+        String protocol
+        String? run_id
         Int? expected_cell_count
         File? limits
         Boolean? keep_all_barcodes
+        String? email
 	}
 
     parameter_meta {
         fastq1: "fastq1"
         fastq2: "fastq2"
-        threads: "# cpu for compute"
+        threads: "# threads for compute"
+        mem_gb: "# memory for compute"
         expected_cell_count: "expected_cell_count"
         keep_all_barcodes: "keep_all_barcodes"
+        email: "email"
+        species: "species"
+        protocol: "protocol"
+        run_id: "run_id"
+        assay: "assay"
+        limits: "limits"
     }
 
     scatter (fastq in [fastq1, fastq2]) {
@@ -35,6 +46,7 @@ workflow RunSalmonRNAseq {
             input:
                 fastqs = [fastq],
                 threads = threads,
+                mem_gb = mem_gb,
                 limits = limits
         }
     }
@@ -42,10 +54,13 @@ workflow RunSalmonRNAseq {
     scatter (fastq in [fastq1, fastq2]) {
         call SalmonQuantification.salmon_quantification as SalmonQuantificationCall {
             input:
-                fastqs = [fastq],
+                fastq1 = fastq1,
+                fastq2 = fastq2,
                 threads = threads,
+                mem_gb = mem_gb,
                 assay = assay,
-                organism = organism,
+                species = species,
+                protocol = protocol,
                 expected_cell_count = expected_cell_count,
                 keep_all_barcodes = keep_all_barcodes
         }

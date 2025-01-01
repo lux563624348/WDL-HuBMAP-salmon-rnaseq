@@ -2,39 +2,48 @@ version 1.0
 
 workflow salmon_quantification {
     input {
-        Array[File] fastqs
+        #Array[File] fastqs
+        Int threads
+        Int mem_gb
+        File fastq1
+        File fastq2
         String assay
-        Int threads = 1
-        Int? expected_cell_count
-        Boolean? keep_all_barcodes
+        String? run_id
+        String? protocol
+        String? species
         String? img_dir
         String? metadata_dir
         String? organism
+        Boolean? keep_all_barcodes
+        Int? expected_cell_count
     }
 
     # Step 1: Adjust Barcodes
     call adjust_barcodes {
         input:
-            fastqs = fastqs,
+            #fastqs = fastqs,
+            fastqs = [fastq1, fastq2],
             assay = assay
     }
 
     # Step 2: Trim Reads
     call trim_reads {
         input:
-            orig_fastqss = fastqs,
+            #orig_fastqss = fastqs,
+            orig_fastqss = [fastq1, fastq2],
             adj_fastqs = adjust_barcodes.adj_fastqs,
-            assay = assay,
-            threads = threads
+            assay = assay
     }
 
     # Step 3: Salmon Quantification
     call salmon {
         input:
-            orig_fastqss = fastqs,
+            #orig_fastqss = fastqs,
+            orig_fastqss = [fastq1, fastq2],
             trimmed_fastqs = trim_reads.trimmed_fastqs,
             assay = assay,
             threads = threads,
+            mem_gb = mem_gb,
             expected_cell_count = expected_cell_count,
             keep_all_barcodes = keep_all_barcodes,
             organism = organism
@@ -45,13 +54,14 @@ workflow salmon_quantification {
         input:
             assay = assay,
             alevin_dir = select_first([salmon.output_dir]),
-            organism = organism
+            species = species
     }
 
     # Step 5: Annotate Cells
     call annotate_cells {
         input:
-            orig_fastqss = fastqs,
+            #orig_fastqss = fastqs,
+            orig_fastqss = [fastq1, fastq2],
             assay = assay,
             h5ad_file = alevin_to_anndata.expr_h5ad,
             img_dir = select_first([img_dir, "default_value"]),
@@ -64,6 +74,7 @@ workflow salmon_quantification {
         File count_matrix_h5ad = alevin_to_anndata.expr_h5ad
         File? raw_count_matrix = alevin_to_anndata.raw_expr_h5ad
         File genome_build_json = alevin_to_anndata.genome_build_json
+        File? annotated_h5ad = annotate_cells.annotated_h5ad_file
     }
 }
 
@@ -82,7 +93,7 @@ task adjust_barcodes {
 
     command {
         # Command for barcode adjustment
-        /opt/adjust_barcodes.py ~{assay} array[file] ~{sep=" " fastqs}
+        /opt/adjust_barcodes.py ~{assay} ~{sep=" " fastqs}
     }
 
     runtime {
@@ -95,7 +106,6 @@ task trim_reads {
         Array[File] orig_fastqss
         String adj_fastqs
         String assay
-        Int threads
     }
 
     output {
@@ -118,6 +128,7 @@ task salmon {
         String trimmed_fastqs
         String assay
         Int threads
+        Int mem_gb
         String? expected_cell_count
         String? keep_all_barcodes
         String? organism
@@ -141,7 +152,7 @@ task alevin_to_anndata {
     input {
         String assay
         String alevin_dir
-        String? organism
+        String? species
     }
 
     output {

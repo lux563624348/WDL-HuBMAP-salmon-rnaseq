@@ -1,6 +1,0 @@
-{
-  "RunSalmonRNAseq.assay": "",
-  "RunSalmonRNAseq.fastq1": "/home/xli_p14/github/WDL-HuBMAP-salmon-rnaseq/test/R1.fastq.gz",
-  "RunSalmonRNAseq.fastq2": "/home/xli_p14/github/WDL-HuBMAP-salmon-rnaseq/test/R2.fastq.gz",
-  "RunSalmonRNAseq.threads": 4
-}

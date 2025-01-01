@@ -1,6 +1,12 @@
 {
-  "fastq1": "test/R1.fastq.gz",
-  "fastq2": "test/R2.fastq.gz",
-  "assay": "",
-  "threads": 4
+  "RunSalmonRNAseq.threads": 4,
+  "RunSalmonRNAseq.mem_gb": 40,
+  "RunSalmonRNAseq.fastq1": "./demo/top_10K_pbmc8k_S1_L007_R1_001.fastq.gz",
+  "RunSalmonRNAseq.fastq2": "./demo/top_10K_pbmc8k_S1_L007_R2_001.fastq.gz", 
+  "RunSalmonRNAseq.species": "GRCh38",
+  "RunSalmonRNAseq.assay": "scRNA-seq assay",
+  "RunSalmonRNAseq.run_id": "pbmc8k",
+  "RunSalmonRNAseq.protocol": "10XV2",
+  "RunSalmonRNAseq.expected_cell_count": 1000,
+  "RunSalmonRNAseq.email": "xl7@psc.edu"
 }
