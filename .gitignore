@@ -1,5 +1,4 @@
 *.fastq
-*.fastq.gz
 *.h5ad
 *.hdf5
 *.pdf
