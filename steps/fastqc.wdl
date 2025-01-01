@@ -30,6 +30,6 @@ task fastqc {
 	}
 
 	output {
-		Array[File] reports = glob(["outputs/*.html", "outputs/*.zip"])
+		Array[File] reports = glob("outputs/*.html")
 	}	
 }
