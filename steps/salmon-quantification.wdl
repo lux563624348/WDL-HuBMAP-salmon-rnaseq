@@ -30,7 +30,7 @@ workflow salmon_quantification {
     call trim_reads {
         input:
             #orig_fastqss = fastqs,
-            orig_fastqss = [fastq1, fastq2],
+            orig_fastqss = sub(fastq1, "/[^/]+$", ""),
             adj_fastqs = adjust_barcodes.adj_fastqs,
             assay = assay
     }
@@ -87,13 +87,14 @@ task adjust_barcodes {
     }
 
     output {
-        String adj_fastqs = "adj_fastq"
+        Array[File] adj_fastqs = glob(["*adj_fastq*"])
+        String adj_fastqs = sub(adj_fastqs, "/[^/]+$", "")
         File? metadata_json = "metadata.json"
     }
 
     command {
         # Command for barcode adjustment
-        /opt/adjust_barcodes.py ~{assay} ~{sep=" " fastqs}
+        /opt/adjust_barcodes.py ~{assay} ~{sub(fastqs[0], "/[^/]+$", "")}
     }
 
     runtime {
@@ -109,12 +110,13 @@ task trim_reads {
     }
 
     output {
-        String trimmed_fastqs = "trimmed"
+        Array[File] trimmed_fastqs = glob("*trimmed*")
+        String trimmed_fastqs = sub(trimmed_fastqs, "/[^/]+$", "")
     }
 
     command {
         # Command for trimming reads
-        /opt/trim_reads.py ~{assay} ~{adj_fastqs} ~{sep=" " orig_fastqss}
+        /opt/trim_reads.py ~{assay} ~{adj_fastqs} ~{sub(orig_fastqss[0], "/[^/]+$", "")}
     }
 
     runtime {
