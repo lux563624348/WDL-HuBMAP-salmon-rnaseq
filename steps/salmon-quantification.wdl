@@ -38,7 +38,8 @@ workflow salmon_quantification {
     # Step 3: Salmon Quantification
     call salmon {
         input:
-            orig_fastqss = sub(fastq1, "/[^/]+$", ""),
+            fastq1 = fastq1,
+            fastq2 = fastq2,
             trimmed_fastqs = trim_reads.trimmed_fastqs,
             assay = assay,
             threads = threads,
@@ -132,7 +133,8 @@ task trim_reads {
 task salmon {
     input {
         Array[File] trimmed_fastqs
-        String orig_fastqss
+        File fastq1
+        File fastq2
         String assay
         Int threads
         Int mem_gb
@@ -146,8 +148,11 @@ task salmon {
         for fastq in ~{sep=' ' trimmed_fastqs}; do
             mv "$fastq" "./trimmed_fastqs/"
         done
+        mkdir -p "orig_fastqss"
+        mv ~{fastq1} "./orig_fastqss/"
+        mv ~{fastq2} "./orig_fastqss/"
         # Command for Salmon quantification (human)
-        /opt/salmon_wrapper.py ~{assay} "./trimmed_fastqs/" ~{orig_fastqss} --threads ~{threads} ~{if defined(expected_cell_count) then "--expected-cell-count " + expected_cell_count else ""} ~{if defined(keep_all_barcodes) then "--keep-all-barcodes " + keep_all_barcodes else ""}
+        /opt/salmon_wrapper.py ~{assay} "./trimmed_fastqs/" "./orig_fastqss/" --threads ~{threads} ~{if defined(expected_cell_count) then "--expected-cell-count " + expected_cell_count else ""} ~{if defined(keep_all_barcodes) then "--keep-all-barcodes " + keep_all_barcodes else ""}
     }
 
     output {

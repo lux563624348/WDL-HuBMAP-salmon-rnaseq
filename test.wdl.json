@@ -7,6 +7,6 @@
   "RunSalmonRNAseq.assay": "10x_v2",
   "RunSalmonRNAseq.run_id": "pbmc8k",
   "RunSalmonRNAseq.protocol": "10XV2",
-  "RunSalmonRNAseq.expected_cell_count": 1000,
+  "RunSalmonRNAseq.expected_cell_count": 10000,
   "RunSalmonRNAseq.email": "xl7@psc.edu"
 }
