@@ -3,7 +3,7 @@
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black
 
-HuBMAP scRNA-seq pipeline: Salmon, Scanpy, scVelo
+WDL version of HuBMAP scRNA-seq pipeline: Salmon, Scanpy, scVelo
 =================================================
 
 Overview
@@ -17,13 +17,15 @@ Requirements
 ------------
 
 Running the pipeline requires a WDL workflow execution engine and container
-runtime; we recommend Docker and the ``miniwdl`` reference implementation.
-``miniwdl`` is written in Python and can be installed into a sufficiently
-recent Python environment with ``pip3 install miniwdl``. Afterward, clone this
-repository, check out a tag, and invoke the pipeline as::
+runtime; we recommend Docker and the ``dockstore`` reference implementation.
+``dockstore`` can be installed by offical tutorial https://dockstore.org/quick-start 
+Afterward, clone this repository and enter, and invoke the pipeline as::
 
-  miniwdl pipeline.wdl -i test.wdl.json
+    dockstore workflow launch --local-entry ./pipeline.wdl --json test.wdl.json
 
+To avoid docker images error, I highly recommend you to download in advance by:: 
+  docker pull hubmap/salmon-grch38:latest
+  
 At least 28GB memory is required for the Salmon quantification step; this
 memory usage is due to inclusion of the entire GRCh38 reference genome as
 decoy sequences in the quantification index. See
