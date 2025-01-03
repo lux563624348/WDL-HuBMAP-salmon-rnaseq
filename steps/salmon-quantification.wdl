@@ -5,8 +5,8 @@ workflow salmon_quantification {
         #Array[File] fastqs
         Int threads
         Int mem_gb
-        File fastq1
-        File fastq2
+        String fastq1
+        String fastq2
         String assay
         String? run_id
         String? protocol
@@ -22,7 +22,8 @@ workflow salmon_quantification {
     call adjust_barcodes {
         input:
             #fastqs = fastqs,
-            fastqs = [fastq1, fastq2],
+            fastq1 = fastq1,
+            fastq2 = fastq2,
             assay = assay
     }
 
@@ -39,7 +40,7 @@ workflow salmon_quantification {
     call salmon {
         input:
             #orig_fastqss = fastqs,
-            orig_fastqss = [fastq1, fastq2],
+            orig_fastqss = sub(fastq1, "/[^/]+$", ""),
             trimmed_fastqs = trim_reads.trimmed_fastqs,
             assay = assay,
             threads = threads,
@@ -61,7 +62,7 @@ workflow salmon_quantification {
     call annotate_cells {
         input:
             #orig_fastqss = fastqs,
-            orig_fastqss = [fastq1, fastq2],
+            orig_fastqss = sub(fastq1, "/[^/]+$", ""),
             assay = assay,
             h5ad_file = alevin_to_anndata.expr_h5ad,
             img_dir = select_first([img_dir, "default_value"]),
@@ -70,7 +71,7 @@ workflow salmon_quantification {
     }
 
     output {
-        File salmon_output = salmon.output_dir
+        String salmon_output = salmon.output_dir
         File count_matrix_h5ad = alevin_to_anndata.expr_h5ad
         File? raw_count_matrix = alevin_to_anndata.raw_expr_h5ad
         File genome_build_json = alevin_to_anndata.genome_build_json
@@ -82,19 +83,19 @@ workflow salmon_quantification {
 
 task adjust_barcodes {
     input {
-        Array[File] fastqs
+        String fastq1
+        String fastq2
         String assay
     }
 
     output {
-        Array[File] adj_fastqs = glob(["*adj_fastq*"])
-        String adj_fastqs = sub(adj_fastqs, "/[^/]+$", "")
+        String adj_fastqs = sub(fastq1, "/[^/]+$", "") + "/adj_fastq"
         File? metadata_json = "metadata.json"
     }
 
     command {
         # Command for barcode adjustment
-        /opt/adjust_barcodes.py ~{assay} ~{sub(fastqs[0], "/[^/]+$", "")}
+        /opt/adjust_barcodes.py ~{assay} ~{sub(fastq1, "/[^/]+$", "")}
     }
 
     runtime {
@@ -104,19 +105,18 @@ task adjust_barcodes {
 
 task trim_reads {
     input {
-        Array[File] orig_fastqss
+        String orig_fastqss
         String adj_fastqs
         String assay
     }
 
     output {
-        Array[File] trimmed_fastqs = glob("*trimmed*")
-        String trimmed_fastqs = sub(trimmed_fastqs, "/[^/]+$", "")
+        String trimmed_fastqs = orig_fastqss + "/trimmed"
     }
 
     command {
         # Command for trimming reads
-        /opt/trim_reads.py ~{assay} ~{adj_fastqs} ~{sub(orig_fastqss[0], "/[^/]+$", "")}
+        /opt/trim_reads.py ~{assay} ~{adj_fastqs} ~{orig_fastqss}
     }
 
     runtime {
@@ -126,7 +126,7 @@ task trim_reads {
 
 task salmon {
     input {
-        Array[File] orig_fastqss
+        String orig_fastqss
         String trimmed_fastqs
         String assay
         Int threads
@@ -142,7 +142,7 @@ task salmon {
 
     command {
         # Command for Salmon quantification (human)
-        /opt/salmon_wrapper.py ~{assay} ~{trimmed_fastqs} ~{sep=" " orig_fastqss} --threads ~{threads} ~{if defined(expected_cell_count) then "--expected-cell-count " + expected_cell_count else ""} ~{if defined(keep_all_barcodes) then "--keep-all-barcodes " + keep_all_barcodes else ""}
+        /opt/salmon_wrapper.py ~{assay} ~{trimmed_fastqs} ~{orig_fastqss} --threads ~{threads} ~{if defined(expected_cell_count) then "--expected-cell-count " + expected_cell_count else ""} ~{if defined(keep_all_barcodes) then "--keep-all-barcodes " + keep_all_barcodes else ""}
     }
 
     runtime {
@@ -175,7 +175,7 @@ task alevin_to_anndata {
 
 task annotate_cells {
     input {
-        Array[File] orig_fastqss
+        String orig_fastqss
         String assay
         File h5ad_file
         String img_dir
@@ -189,7 +189,7 @@ task annotate_cells {
 
     command {
         # Command to annotate cells in the AnnData file
-        /opt/annotate_cells.py ~{assay} ~{h5ad_file} ~{sep=" " orig_fastqss} ~{if defined(img_dir) then "--img_dir " + img_dir else ""} ~{if defined(metadata_dir) then "--metadata_dir " + metadata_dir else ""} ~{if defined(metadata_json) then "--metadata_json " + metadata_json else ""}
+        /opt/annotate_cells.py ~{assay} ~{h5ad_file} ~{orig_fastqss} ~{if defined(img_dir) then "--img_dir " + img_dir else ""} ~{if defined(metadata_dir) then "--metadata_dir " + metadata_dir else ""} ~{if defined(metadata_json) then "--metadata_json " + metadata_json else ""}
     }
 
     runtime {

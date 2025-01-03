@@ -51,27 +51,25 @@ workflow RunSalmonRNAseq {
         }
     }
 
-    scatter (fastq in [fastq1, fastq2]) {
-        call SalmonQuantification.salmon_quantification as SalmonQuantificationCall {
-            input:
-                fastq1 = fastq1,
-                fastq2 = fastq2,
-                threads = threads,
-                mem_gb = mem_gb,
-                assay = assay,
-                species = species,
-                protocol = protocol,
-                expected_cell_count = expected_cell_count,
-                keep_all_barcodes = keep_all_barcodes
-        }
+    call SalmonQuantification.salmon_quantification as SalmonQuantificationCall {
+        input:
+            fastq1 = fastq1,
+            fastq2 = fastq2,
+            threads = threads,
+            mem_gb = mem_gb,
+            assay = assay,
+            species = species,
+            protocol = protocol,
+            expected_cell_count = expected_cell_count,
+            keep_all_barcodes = keep_all_barcodes
     }
 
 	output {
 		Array[File] reports = flatten(fastqc.reports)
-        Array[File] salmon_output = SalmonQuantificationCall.salmon_output
-        Array[File] count_matrix_h5ad = SalmonQuantificationCall.count_matrix_h5ad
-        Array[File] genome_build_json = SalmonQuantificationCall.genome_build_json
-        Array[File?] raw_count_matrix = SalmonQuantificationCall.raw_count_matrix
+        String salmon_output = SalmonQuantificationCall.salmon_output
+        File count_matrix_h5ad = SalmonQuantificationCall.count_matrix_h5ad
+        File genome_build_json = SalmonQuantificationCall.genome_build_json
+        File? raw_count_matrix = SalmonQuantificationCall.raw_count_matrix
 	}
 
 }
