@@ -2,11 +2,10 @@ version 1.0
 
 workflow salmon_quantification {
     input {
-        #Array[File] fastqs
         Int threads
         Int mem_gb
-        String fastq1
-        String fastq2
+        File fastq1
+        File fastq2
         String assay
         String? run_id
         String? protocol
@@ -21,17 +20,17 @@ workflow salmon_quantification {
     # Step 1: Adjust Barcodes
     call adjust_barcodes {
         input:
-            #fastqs = fastqs,
             fastq1 = fastq1,
             fastq2 = fastq2,
+            orig_fastqss = sub(fastq1, "/[^/]+$", ""),
             assay = assay
     }
 
     # Step 2: Trim Reads
     call trim_reads {
         input:
-            #orig_fastqss = fastqs,
-            orig_fastqss = sub(fastq1, "/[^/]+$", ""),
+            fastq1 = fastq1,
+            fastq2 = fastq2,
             adj_fastqs = adjust_barcodes.adj_fastqs,
             assay = assay
     }
@@ -39,7 +38,6 @@ workflow salmon_quantification {
     # Step 3: Salmon Quantification
     call salmon {
         input:
-            #orig_fastqss = fastqs,
             orig_fastqss = sub(fastq1, "/[^/]+$", ""),
             trimmed_fastqs = trim_reads.trimmed_fastqs,
             assay = assay,
@@ -61,7 +59,6 @@ workflow salmon_quantification {
     # Step 5: Annotate Cells
     call annotate_cells {
         input:
-            #orig_fastqss = fastqs,
             orig_fastqss = sub(fastq1, "/[^/]+$", ""),
             assay = assay,
             h5ad_file = alevin_to_anndata.expr_h5ad,
@@ -83,19 +80,20 @@ workflow salmon_quantification {
 
 task adjust_barcodes {
     input {
-        String fastq1
-        String fastq2
+        File fastq1
+        File fastq2
+        String orig_fastqss
         String assay
+    }
+    
+    command {
+        # Command for barcode adjustment
+        /opt/adjust_barcodes.py ~{assay} ~{orig_fastqss}
     }
 
     output {
-        String adj_fastqs = sub(fastq1, "/[^/]+$", "") + "/adj_fastq"
+        String adj_fastqs = "/adj_fastq"
         File? metadata_json = "metadata.json"
-    }
-
-    command {
-        # Command for barcode adjustment
-        /opt/adjust_barcodes.py ~{assay} ~{sub(fastq1, "/[^/]+$", "")}
     }
 
     runtime {
@@ -105,18 +103,25 @@ task adjust_barcodes {
 
 task trim_reads {
     input {
-        String orig_fastqss
+        File fastq1
+        File fastq2
         String adj_fastqs
         String assay
     }
 
-    output {
-        String trimmed_fastqs = orig_fastqss + "/trimmed"
-    }
-
     command {
         # Command for trimming reads
-        /opt/trim_reads.py ~{assay} ~{adj_fastqs} ~{orig_fastqss}
+        mkdir -p "adj_fastqs"
+        mkdir -p "orig_fastqss"
+        mv ~{fastq1} "./orig_fastqss/"
+        mv ~{fastq2} "./orig_fastqss/"
+        /opt/trim_reads.py ~{assay} "./adj_fastqs" "./orig_fastqss"
+    }
+
+    output {
+        # Capture all trimmed fastq files
+        Array[File] trimmed_fastqs = glob("trimmed/1/*.gz")
+        File? metadata_json = "metadata.json"
     }
 
     runtime {
@@ -126,8 +131,8 @@ task trim_reads {
 
 task salmon {
     input {
+        Array[File] trimmed_fastqs
         String orig_fastqss
-        String trimmed_fastqs
         String assay
         Int threads
         Int mem_gb
@@ -136,13 +141,15 @@ task salmon {
         String? organism
     }
 
-    output {
-        String output_dir = "salmon_out"
+    command {
+        mkdir -p "trimmed_fastqs"
+        mv ~{trimmed_fastqs} "./trimmed_fastqs/"
+        # Command for Salmon quantification (human)
+        /opt/salmon_wrapper.py ~{assay} "./trimmed_fastqs/" ~{orig_fastqss} --threads ~{threads} ~{if defined(expected_cell_count) then "--expected-cell-count " + expected_cell_count else ""} ~{if defined(keep_all_barcodes) then "--keep-all-barcodes " + keep_all_barcodes else ""}
     }
 
-    command {
-        # Command for Salmon quantification (human)
-        /opt/salmon_wrapper.py ~{assay} ~{trimmed_fastqs} ~{orig_fastqss} --threads ~{threads} ~{if defined(expected_cell_count) then "--expected-cell-count " + expected_cell_count else ""} ~{if defined(keep_all_barcodes) then "--keep-all-barcodes " + keep_all_barcodes else ""}
+    output {
+        String output_dir = "salmon_out"
     }
 
     runtime {
