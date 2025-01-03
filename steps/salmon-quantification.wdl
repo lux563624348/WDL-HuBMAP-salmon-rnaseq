@@ -143,7 +143,9 @@ task salmon {
 
     command {
         mkdir -p "trimmed_fastqs"
-        mv ~{trimmed_fastqs} "./trimmed_fastqs/"
+        for fastq in ~{sep=' ' trimmed_fastqs}; do
+            mv "$fastq" "./trimmed_fastqs/"
+        done
         # Command for Salmon quantification (human)
         /opt/salmon_wrapper.py ~{assay} "./trimmed_fastqs/" ~{orig_fastqss} --threads ~{threads} ~{if defined(expected_cell_count) then "--expected-cell-count " + expected_cell_count else ""} ~{if defined(keep_all_barcodes) then "--keep-all-barcodes " + keep_all_barcodes else ""}
     }
