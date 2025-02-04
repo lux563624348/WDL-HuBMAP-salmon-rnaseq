@@ -173,12 +173,12 @@ task alevin_to_anndata {
     }
 
     command {
-        mkdir -p "alevin_input"
+        mkdir -p "alevin"
         for file in ~{sep=' ' alevin_inputs}; do
-            mv "$file" "./alevin_input/"
+            mv "$file" "./alevin/"
         done
-        # Command to convert Alevin output to AnnData object
-        /opt/alevin_to_anndata.py ~{assay} "./alevin_input/"
+        # Command to convert Alevin output to AnnData object, image default read data from ./alevin
+        /opt/alevin_to_anndata.py ~{assay} "./"
     }
 
     output {
