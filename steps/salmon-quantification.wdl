@@ -156,7 +156,7 @@ task salmon {
     }
 
     output {
-        String output_dir = "salmon_out"
+        Array[File] salmon_alevin_outputs = glob("salmon_out/alevin/*")
     }
 
     runtime {
@@ -167,8 +167,17 @@ task salmon {
 task alevin_to_anndata {
     input {
         String assay
-        String alevin_dir
         String? species
+        Array[File] salmon_alevin_outputs
+    }
+
+    command {
+        mkdir -p "salmon_alevin_output"
+        for file in ~{sep=' ' salmon_alevin_outputs}; do
+            mv "$file" "./salmon_alevin_output/"
+        done
+        # Command to convert Alevin output to AnnData object
+        /opt/alevin_to_anndata.py ~{assay} "./salmon_alevin_output/"
     }
 
     output {
@@ -177,19 +186,17 @@ task alevin_to_anndata {
         File genome_build_json = "genome_build.json"
     }
 
-    command {
-        # Command to convert Alevin output to AnnData object
-        /opt/alevin_to_anndata.py ~{assay} ~{alevin_dir}
-    }
-
     runtime {
         docker: "hubmap/scrna-analysis:latest"
     }
 }
 
+
+
 task annotate_cells {
     input {
-        String orig_fastqss
+        File fastq1
+        File fastq2
         String assay
         File h5ad_file
         String img_dir
@@ -197,13 +204,16 @@ task annotate_cells {
         String metadata_json
     }
 
-    output {
-        File annotated_h5ad_file = "expr.h5ad"
+    command {
+        mkdir -p "orig_fastqss"
+        mv ~{fastq1} "./orig_fastqss/"
+        mv ~{fastq2} "./orig_fastqss/"
+        # Command to annotate cells in the AnnData file
+        /opt/annotate_cells.py ~{assay} ~{h5ad_file} "./orig_fastqss/" ~{if defined(img_dir) then "--img_dir " + img_dir else ""} ~{if defined(metadata_dir) then "--metadata_dir " + metadata_dir else ""} ~{if defined(metadata_json) then "--metadata_json " + metadata_json else ""}
     }
 
-    command {
-        # Command to annotate cells in the AnnData file
-        /opt/annotate_cells.py ~{assay} ~{h5ad_file} ~{orig_fastqss} ~{if defined(img_dir) then "--img_dir " + img_dir else ""} ~{if defined(metadata_dir) then "--metadata_dir " + metadata_dir else ""} ~{if defined(metadata_json) then "--metadata_json " + metadata_json else ""}
+    output {
+        File annotated_h5ad_file = "expr.h5ad"
     }
 
     runtime {
