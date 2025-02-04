@@ -53,14 +53,16 @@ workflow salmon_quantification {
     call alevin_to_anndata {
         input:
             assay = assay,
-            alevin_dir = select_first([salmon.output_dir]),
+            alevin_inputs = salmon.alevin_outputs
             species = species
+            
     }
 
     # Step 5: Annotate Cells
     call annotate_cells {
         input:
-            orig_fastqss = sub(fastq1, "/[^/]+$", ""),
+            fastq1 = fastq1,
+            fastq2 = fastq2,
             assay = assay,
             h5ad_file = alevin_to_anndata.expr_h5ad,
             img_dir = select_first([img_dir, "default_value"]),
@@ -69,7 +71,7 @@ workflow salmon_quantification {
     }
 
     output {
-        String salmon_output = salmon.output_dir
+        # String salmon_output = salmon.output_dir
         File count_matrix_h5ad = alevin_to_anndata.expr_h5ad
         File? raw_count_matrix = alevin_to_anndata.raw_expr_h5ad
         File genome_build_json = alevin_to_anndata.genome_build_json
@@ -156,7 +158,7 @@ task salmon {
     }
 
     output {
-        Array[File] salmon_alevin_outputs = glob("salmon_out/alevin/*")
+        Array[File] alevin_outputs = glob("salmon_out/alevin/*")
     }
 
     runtime {
@@ -168,16 +170,16 @@ task alevin_to_anndata {
     input {
         String assay
         String? species
-        Array[File] salmon_alevin_outputs
+        Array[File] alevin_inputs
     }
 
     command {
-        mkdir -p "salmon_alevin_output"
-        for file in ~{sep=' ' salmon_alevin_outputs}; do
-            mv "$file" "./salmon_alevin_output/"
+        mkdir -p "alevin_input"
+        for file in ~{sep=' ' alevin_inputs}; do
+            mv "$file" "./alevin_input/"
         done
         # Command to convert Alevin output to AnnData object
-        /opt/alevin_to_anndata.py ~{assay} "./salmon_alevin_output/"
+        /opt/alevin_to_anndata.py ~{assay} "./alevin_input/"
     }
 
     output {
