@@ -66,7 +66,6 @@ workflow RunSalmonRNAseq {
 
 	output {
 		Array[File] reports = flatten(fastqc.reports)
-        String salmon_output = SalmonQuantificationCall.salmon_output
         File count_matrix_h5ad = SalmonQuantificationCall.count_matrix_h5ad
         File genome_build_json = SalmonQuantificationCall.genome_build_json
         File? raw_count_matrix = SalmonQuantificationCall.raw_count_matrix

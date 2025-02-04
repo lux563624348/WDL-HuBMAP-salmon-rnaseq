@@ -71,7 +71,6 @@ workflow salmon_quantification {
     }
 
     output {
-        # String salmon_output = salmon.output_dir
         File count_matrix_h5ad = alevin_to_anndata.expr_h5ad
         File? raw_count_matrix = alevin_to_anndata.raw_expr_h5ad
         File genome_build_json = alevin_to_anndata.genome_build_json
