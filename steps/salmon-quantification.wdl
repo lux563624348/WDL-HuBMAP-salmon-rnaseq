@@ -53,7 +53,7 @@ workflow salmon_quantification {
     call alevin_to_anndata {
         input:
             assay = assay,
-            alevin_inputs = salmon.alevin_outputs
+            alevin_inputs = salmon.alevin_outputs,
             species = species
             
     }
