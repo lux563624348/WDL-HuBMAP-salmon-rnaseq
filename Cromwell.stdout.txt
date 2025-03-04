@@ -1,0 +1,311 @@
+	[2025-03-03 15:11:11,75] [info] Running with database db.url = jdbc:hsqldb:mem:4ef1822d-07c4-4782-9d46-c7527846fbb6;shutdown=false;hsqldb.tx=mvcc
+	[2025-03-03 15:11:13,68] [info] Running migration RenameWorkflowOptionsInMetadata with a read batch size of 100000 and a write batch size of 100000
+	[2025-03-03 15:11:13,69] [info] [RenameWorkflowOptionsInMetadata] 100%
+	[2025-03-03 15:11:13,84] [info] Running with database db.url = jdbc:hsqldb:mem:0d12667e-4e39-4b8a-a234-1d6467ece9b6;shutdown=false;hsqldb.tx=mvcc
+	[2025-03-03 15:11:14,19] [info] Slf4jLogger started
+	[2025-03-03 15:11:14,40] [info] Workflow heartbeat configuration:
+	{
+	  "cromwellId" : "cromid-6959f62",
+	  "heartbeatInterval" : "2 minutes",
+	  "ttl" : "10 minutes",
+	  "failureShutdownDuration" : "5 minutes",
+	  "writeBatchSize" : 10000,
+	  "writeThreshold" : 10000
+	}
+	[2025-03-03 15:11:14,46] [info] Metadata summary refreshing every 1 second.
+	[2025-03-03 15:11:14,46] [info] No metadata archiver defined in config
+	[2025-03-03 15:11:14,46] [info] No metadata deleter defined in config
+	[2025-03-03 15:11:14,48] [info] KvWriteActor configured to flush with batch size 200 and process rate 5 seconds.
+	[2025-03-03 15:11:14,49] [info] WriteMetadataActor configured to flush with batch size 200 and process rate 5 seconds.
+	[2025-03-03 15:11:14,52] [info] CallCacheWriteActor configured to flush with batch size 100 and process rate 3 seconds.
+	[2025-03-03 15:11:14,58] [info] JobRestartCheckTokenDispenser - Distribution rate: 50 per 1 seconds.
+	[2025-03-03 15:11:14,60] [info] JobExecutionTokenDispenser - Distribution rate: 20 per 10 seconds.
+	[2025-03-03 15:11:14,66] [info] SingleWorkflowRunnerActor: Version 84
+	[2025-03-03 15:11:14,67] [info] SingleWorkflowRunnerActor: Submitting workflow
+	[2025-03-03 15:11:14,71] [info] Unspecified type (Unspecified version) workflow 875acd29-483b-40b1-bdba-9f7d73c18620 submitted
+	[2025-03-03 15:11:14,73] [info] SingleWorkflowRunnerActor: Workflow submitted [38;5;2m875acd29-483b-40b1-bdba-9f7d73c18620[0m
+	[2025-03-03 15:11:14,74] [info] 1 new workflows fetched by cromid-6959f62: 875acd29-483b-40b1-bdba-9f7d73c18620
+	[2025-03-03 15:11:14,74] [info] WorkflowManagerActor: Starting workflow [38;5;2m875acd29-483b-40b1-bdba-9f7d73c18620[0m
+	[2025-03-03 15:11:14,75] [info] WorkflowManagerActor: Successfully started WorkflowActor-875acd29-483b-40b1-bdba-9f7d73c18620
+	[2025-03-03 15:11:14,75] [info] Retrieved 1 workflows from the WorkflowStoreActor
+	[2025-03-03 15:11:14,77] [info] WorkflowStoreHeartbeatWriteActor configured to flush with batch size 10000 and process rate 2 minutes.
+	[2025-03-03 15:11:14,83] [info] MaterializeWorkflowDescriptorActor [[38;5;2m875acd29[0m]: Parsing workflow as WDL 1.0
+	[2025-03-03 15:11:15,39] [info] MaterializeWorkflowDescriptorActor [[38;5;2m875acd29[0m]: Call-to-Backend assignments: salmon_quantification.adjust_barcodes -> Local, salmon_quantification.trim_reads -> Local, salmon_quantification.annotate_cells -> Local, RunSalmonRNAseq.fastqc -> Local, salmon_quantification.salmon -> Local, salmon_quantification.alevin_to_anndata -> Local
+	[2025-03-03 15:11:19,60] [info] Not triggering log of restart checking token queue status. Effective log interval = None
+	[2025-03-03 15:11:19,62] [info] Not triggering log of execution token queue status. Effective log interval = None
+	[2025-03-03 15:11:19,74] [info] WorkflowExecutionActor-875acd29-483b-40b1-bdba-9f7d73c18620 [[38;5;2m875acd29[0m]: Starting RunSalmonRNAseq.fastqc (2 shards)
+	[2025-03-03 15:11:19,75] [info] cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49-SubWorkflowActor-SubWorkflow-SalmonQuantificationCall:-1:1 [[38;5;2mcd8a2ba9[0m]: Starting salmon_quantification.adjust_barcodes
+	[2025-03-03 15:11:24,63] [info] Assigned new job execution tokens to the following groups: 875acd29: 3
+	[2025-03-03 15:11:25,48] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2mcd8a2ba9[0msalmon_quantification.adjust_barcodes:NA:1]: [38;5;5m# Command for barcode adjustment
+	/opt/adjust_barcodes.py 10x_v2 /home/xli_p14/github/WDL-HuBMAP-salmon-rnaseq/cromwell-input/363c2063-ee93-43ed-8218-1d9baadfef5e/./demo[0m
+	[2025-03-03 15:11:25,48] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2m875acd29[0mRunSalmonRNAseq.fastqc:1:1]: [38;5;5mmkdir outputs
+	if [[ "" != "" ]]
+	then
+		fastqc -o outputs -l  /cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-fastqc/shard-1/inputs/-801345468/Sample_X_S1_L001_R2_001.fastq.gz
+	else
+		fastqc -o outputs /cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-fastqc/shard-1/inputs/-801345468/Sample_X_S1_L001_R2_001.fastq.gz
+	fi[0m
+	[2025-03-03 15:11:25,48] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2m875acd29[0mRunSalmonRNAseq.fastqc:0:1]: [38;5;5mmkdir outputs
+	if [[ "" != "" ]]
+	then
+		fastqc -o outputs -l  /cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-fastqc/shard-0/inputs/-801345468/Sample_X_S1_L001_R1_001.fastq.gz
+	else
+		fastqc -o outputs /cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-fastqc/shard-0/inputs/-801345468/Sample_X_S1_L001_R1_001.fastq.gz
+	fi[0m
+	[2025-03-03 15:11:25,52] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2mcd8a2ba9[0msalmon_quantification.adjust_barcodes:NA:1]: executing: # make sure there is no preexisting Docker CID file
+	rm -f /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-adjust_barcodes/execution/docker_cid
+	# run as in the original configuration without --rm flag (will remove later)
+	docker run \
+	  --cidfile /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-adjust_barcodes/execution/docker_cid \
+	  -i \
+	   \
+	  --entrypoint /bin/bash \
+	  -v /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-adjust_barcodes:/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-adjust_barcodes:delegated \
+	  hubmap/scrna-barcode-adj@sha256:9ce4797b5d78efeac8f68b30e478a19f49e0712b29c157960f04a46e716b46b5 /cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-adjust_barcodes/execution/script
+	
+	# get the return code (working even if the container was detached)
+	rc=$(docker wait [38;5;5mcat /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-adjust_barcodes/execution/docker_cid[0m)
+	
+	# remove the container after waiting
+	docker rm [38;5;5mcat /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-adjust_barcodes/execution/docker_cid[0m
+	
+	# return exit code
+	exit $rc
+	[2025-03-03 15:11:25,52] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2m875acd29[0mRunSalmonRNAseq.fastqc:0:1]: executing: # make sure there is no preexisting Docker CID file
+	rm -f /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-fastqc/shard-0/execution/docker_cid
+	# run as in the original configuration without --rm flag (will remove later)
+	docker run \
+	  --cidfile /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-fastqc/shard-0/execution/docker_cid \
+	  -i \
+	   \
+	  --entrypoint /bin/bash \
+	  -v /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-fastqc/shard-0:/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-fastqc/shard-0:delegated \
+	  hubmap/scrna-analysis@sha256:2e4b8dab0b8e4a236fd4fcd4fa972dcf2c9724d0dcfb280ce5d4a0359dbf5d21 /cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-fastqc/shard-0/execution/script
+	
+	# get the return code (working even if the container was detached)
+	rc=$(docker wait [38;5;5mcat /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-fastqc/shard-0/execution/docker_cid[0m)
+	
+	# remove the container after waiting
+	docker rm [38;5;5mcat /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-fastqc/shard-0/execution/docker_cid[0m
+	
+	# return exit code
+	exit $rc
+	[2025-03-03 15:11:25,52] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2m875acd29[0mRunSalmonRNAseq.fastqc:1:1]: executing: # make sure there is no preexisting Docker CID file
+	rm -f /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-fastqc/shard-1/execution/docker_cid
+	# run as in the original configuration without --rm flag (will remove later)
+	docker run \
+	  --cidfile /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-fastqc/shard-1/execution/docker_cid \
+	  -i \
+	   \
+	  --entrypoint /bin/bash \
+	  -v /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-fastqc/shard-1:/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-fastqc/shard-1:delegated \
+	  hubmap/scrna-analysis@sha256:2e4b8dab0b8e4a236fd4fcd4fa972dcf2c9724d0dcfb280ce5d4a0359dbf5d21 /cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-fastqc/shard-1/execution/script
+	
+	# get the return code (working even if the container was detached)
+	rc=$(docker wait [38;5;5mcat /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-fastqc/shard-1/execution/docker_cid[0m)
+	
+	# remove the container after waiting
+	docker rm [38;5;5mcat /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-fastqc/shard-1/execution/docker_cid[0m
+	
+	# return exit code
+	exit $rc
+	[2025-03-03 15:11:29,52] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2m875acd29[0mRunSalmonRNAseq.fastqc:0:1]: job id: 21649
+	[2025-03-03 15:11:29,52] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2mcd8a2ba9[0msalmon_quantification.adjust_barcodes:NA:1]: job id: 21648
+	[2025-03-03 15:11:29,52] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2m875acd29[0mRunSalmonRNAseq.fastqc:1:1]: job id: 21647
+	[2025-03-03 15:11:29,53] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2m875acd29[0mRunSalmonRNAseq.fastqc:0:1]: Status change from - to WaitingForReturnCode
+	[2025-03-03 15:11:29,53] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2mcd8a2ba9[0msalmon_quantification.adjust_barcodes:NA:1]: Status change from - to WaitingForReturnCode
+	[2025-03-03 15:11:29,53] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2m875acd29[0mRunSalmonRNAseq.fastqc:1:1]: Status change from - to WaitingForReturnCode
+	[2025-03-03 15:11:35,06] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2mcd8a2ba9[0msalmon_quantification.adjust_barcodes:NA:1]: Status change from WaitingForReturnCode to Done
+	[2025-03-03 15:11:37,09] [info] cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49-SubWorkflowActor-SubWorkflow-SalmonQuantificationCall:-1:1 [[38;5;2mcd8a2ba9[0m]: Starting salmon_quantification.trim_reads
+	[2025-03-03 15:11:44,62] [info] Assigned new job execution tokens to the following groups: 875acd29: 1
+	[2025-03-03 15:11:44,88] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2mcd8a2ba9[0msalmon_quantification.trim_reads:NA:1]: [38;5;5m# Command for trimming reads
+	mkdir -p "adj_fastqs"
+	mkdir -p "orig_fastqss"
+	mv /cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-trim_reads/inputs/-801345468/Sample_X_S1_L001_R1_001.fastq.gz "./orig_fastqss/"
+	mv /cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-trim_reads/inputs/-801345468/Sample_X_S1_L001_R2_001.fastq.gz "./orig_fastqss/"
+	/opt/trim_reads.py 10x_v2 "./adj_fastqs" "./orig_fastqss"[0m
+	[2025-03-03 15:11:44,89] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2mcd8a2ba9[0msalmon_quantification.trim_reads:NA:1]: executing: # make sure there is no preexisting Docker CID file
+	rm -f /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-trim_reads/execution/docker_cid
+	# run as in the original configuration without --rm flag (will remove later)
+	docker run \
+	  --cidfile /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-trim_reads/execution/docker_cid \
+	  -i \
+	   \
+	  --entrypoint /bin/bash \
+	  -v /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-trim_reads:/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-trim_reads:delegated \
+	  hubmap/scrna-trim-reads@sha256:db093f1c6142ae027e108e7a9078e3e81c5fc883f3cdb158f2993d456df1ca0d /cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-trim_reads/execution/script
+	
+	# get the return code (working even if the container was detached)
+	rc=$(docker wait [38;5;5mcat /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-trim_reads/execution/docker_cid[0m)
+	
+	# remove the container after waiting
+	docker rm [38;5;5mcat /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-trim_reads/execution/docker_cid[0m
+	
+	# return exit code
+	exit $rc
+	[2025-03-03 15:11:49,51] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2mcd8a2ba9[0msalmon_quantification.trim_reads:NA:1]: job id: 21998
+	[2025-03-03 15:11:49,51] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2mcd8a2ba9[0msalmon_quantification.trim_reads:NA:1]: Status change from - to WaitingForReturnCode
+	[2025-03-03 15:11:50,98] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2mcd8a2ba9[0msalmon_quantification.trim_reads:NA:1]: Status change from WaitingForReturnCode to Done
+	[2025-03-03 15:11:52,39] [info] cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49-SubWorkflowActor-SubWorkflow-SalmonQuantificationCall:-1:1 [[38;5;2mcd8a2ba9[0m]: Starting salmon_quantification.salmon
+	[2025-03-03 15:11:54,62] [info] Assigned new job execution tokens to the following groups: 875acd29: 1
+	[2025-03-03 15:11:54,90] [[38;5;220mwarn[0m] Localization via hard link has failed: /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-salmon/inputs/95213480/Sample_X_S1_L001_R1_001.fastq.gz -> /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-trim_reads/execution/glob-da6388fa858e9fa1646fa0b670305cd8/Sample_X_S1_L001_R1_001.fastq.gz: Operation not permitted
+	[2025-03-03 15:11:54,91] [[38;5;220mwarn[0m] Localization via hard link has failed: /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-salmon/inputs/95213480/Sample_X_S1_L001_R2_001.fastq.gz -> /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-trim_reads/execution/glob-da6388fa858e9fa1646fa0b670305cd8/Sample_X_S1_L001_R2_001.fastq.gz: Operation not permitted
+	[2025-03-03 15:11:54,93] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2mcd8a2ba9[0msalmon_quantification.salmon:NA:1]: [38;5;5mmkdir -p "trimmed_fastqs"
+	for fastq in /cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-salmon/inputs/95213480/Sample_X_S1_L001_R1_001.fastq.gz /cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-salmon/inputs/95213480/Sample_X_S1_L001_R2_001.fastq.gz; do
+	    mv "$fastq" "./trimmed_fastqs/"
+	done
+	mkdir -p "orig_fastqss"
+	mv /cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-salmon/inputs/-801345468/Sample_X_S1_L001_R1_001.fastq.gz "./orig_fastqss/"
+	mv /cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-salmon/inputs/-801345468/Sample_X_S1_L001_R2_001.fastq.gz "./orig_fastqss/"
+	# Command for Salmon quantification (human)
+	/opt/salmon_wrapper.py 10x_v2 "./trimmed_fastqs/" "./orig_fastqss/" --threads 4 --expected-cell-count 5000[0m
+	[2025-03-03 15:11:54,94] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2mcd8a2ba9[0msalmon_quantification.salmon:NA:1]: executing: # make sure there is no preexisting Docker CID file
+	rm -f /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-salmon/execution/docker_cid
+	# run as in the original configuration without --rm flag (will remove later)
+	docker run \
+	  --cidfile /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-salmon/execution/docker_cid \
+	  -i \
+	   \
+	  --entrypoint /bin/bash \
+	  -v /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-salmon:/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-salmon:delegated \
+	  hubmap/salmon-grch38@sha256:e585691a25753226603e56729b29f66743c83c71962d7c2dca3884152a17f2f4 /cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-salmon/execution/script
+	
+	# get the return code (working even if the container was detached)
+	rc=$(docker wait [38;5;5mcat /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-salmon/execution/docker_cid[0m)
+	
+	# remove the container after waiting
+	docker rm [38;5;5mcat /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-salmon/execution/docker_cid[0m
+	
+	# return exit code
+	exit $rc
+	[2025-03-03 15:11:59,50] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2mcd8a2ba9[0msalmon_quantification.salmon:NA:1]: job id: 22270
+	[2025-03-03 15:11:59,50] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2mcd8a2ba9[0msalmon_quantification.salmon:NA:1]: Status change from - to WaitingForReturnCode
+	[2025-03-03 15:12:04,50] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2m875acd29[0mRunSalmonRNAseq.fastqc:1:1]: Status change from WaitingForReturnCode to Done
+	[2025-03-03 15:12:09,97] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2m875acd29[0mRunSalmonRNAseq.fastqc:0:1]: Status change from WaitingForReturnCode to Done
+	[2025-03-03 15:15:10,01] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2mcd8a2ba9[0msalmon_quantification.salmon:NA:1]: Status change from WaitingForReturnCode to Done
+	[2025-03-03 15:15:11,19] [info] cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49-SubWorkflowActor-SubWorkflow-SalmonQuantificationCall:-1:1 [[38;5;2mcd8a2ba9[0m]: Starting salmon_quantification.alevin_to_anndata
+	[2025-03-03 15:15:14,62] [info] Assigned new job execution tokens to the following groups: 875acd29: 1
+	[2025-03-03 15:15:14,72] [[38;5;220mwarn[0m] Localization via hard link has failed: /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/inputs/1080186997/alevin.log -> /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-salmon/execution/glob-52839c6dd0cde9315348db24e645decc/alevin.log: Operation not permitted
+	[2025-03-03 15:15:14,73] [[38;5;220mwarn[0m] Localization via hard link has failed: /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/inputs/1080186997/featureDump.txt -> /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-salmon/execution/glob-52839c6dd0cde9315348db24e645decc/featureDump.txt: Operation not permitted
+	[2025-03-03 15:15:14,73] [[38;5;220mwarn[0m] Localization via hard link has failed: /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/inputs/1080186997/quants_mat.gz -> /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-salmon/execution/glob-52839c6dd0cde9315348db24e645decc/quants_mat.gz: Operation not permitted
+	[2025-03-03 15:15:14,73] [[38;5;220mwarn[0m] Localization via hard link has failed: /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/inputs/1080186997/quants_mat.mtx.gz -> /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-salmon/execution/glob-52839c6dd0cde9315348db24e645decc/quants_mat.mtx.gz: Operation not permitted
+	[2025-03-03 15:15:14,73] [[38;5;220mwarn[0m] Localization via hard link has failed: /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/inputs/1080186997/quants_mat_cols.txt -> /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-salmon/execution/glob-52839c6dd0cde9315348db24e645decc/quants_mat_cols.txt: Operation not permitted
+	[2025-03-03 15:15:14,74] [[38;5;220mwarn[0m] Localization via hard link has failed: /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/inputs/1080186997/quants_mat_rows.txt -> /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-salmon/execution/glob-52839c6dd0cde9315348db24e645decc/quants_mat_rows.txt: Operation not permitted
+	[2025-03-03 15:15:14,74] [[38;5;220mwarn[0m] Localization via hard link has failed: /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/inputs/1080186997/quants_tier_mat.gz -> /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-salmon/execution/glob-52839c6dd0cde9315348db24e645decc/quants_tier_mat.gz: Operation not permitted
+	[2025-03-03 15:15:14,76] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2mcd8a2ba9[0msalmon_quantification.alevin_to_anndata:NA:1]: [38;5;5mmkdir -p "alevin"
+	for file in /cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/inputs/1080186997/alevin.log /cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/inputs/1080186997/featureDump.txt /cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/inputs/1080186997/quants_mat.gz /cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/inputs/1080186997/quants_mat.mtx.gz /cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/inputs/1080186997/quants_mat_cols.txt /cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/inputs/1080186997/quants_mat_rows.txt /cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/inputs/1080186997/quants_tier_mat.gz; do
+	    mv "$file" "./alevin/"
+	done
+	# Command to convert Alevin output to AnnData object, image default read data from ./alevin
+	/opt/alevin_to_anndata.py 10x_v2 "./"[0m
+	[2025-03-03 15:15:14,78] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2mcd8a2ba9[0msalmon_quantification.alevin_to_anndata:NA:1]: executing: # make sure there is no preexisting Docker CID file
+	rm -f /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/execution/docker_cid
+	# run as in the original configuration without --rm flag (will remove later)
+	docker run \
+	  --cidfile /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/execution/docker_cid \
+	  -i \
+	   \
+	  --entrypoint /bin/bash \
+	  -v /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata:/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata:delegated \
+	  hubmap/scrna-analysis@sha256:2e4b8dab0b8e4a236fd4fcd4fa972dcf2c9724d0dcfb280ce5d4a0359dbf5d21 /cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/execution/script
+	
+	# get the return code (working even if the container was detached)
+	rc=$(docker wait [38;5;5mcat /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/execution/docker_cid[0m)
+	
+	# remove the container after waiting
+	docker rm [38;5;5mcat /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/execution/docker_cid[0m
+	
+	# return exit code
+	exit $rc
+	[2025-03-03 15:15:19,56] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2mcd8a2ba9[0msalmon_quantification.alevin_to_anndata:NA:1]: job id: 23706
+	[2025-03-03 15:15:19,57] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2mcd8a2ba9[0msalmon_quantification.alevin_to_anndata:NA:1]: Status change from - to WaitingForReturnCode
+	[2025-03-03 15:15:21,66] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2mcd8a2ba9[0msalmon_quantification.alevin_to_anndata:NA:1]: Status change from WaitingForReturnCode to Done
+	[2025-03-03 15:15:23,44] [info] cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49-SubWorkflowActor-SubWorkflow-SalmonQuantificationCall:-1:1 [[38;5;2mcd8a2ba9[0m]: Starting salmon_quantification.annotate_cells
+	[2025-03-03 15:15:24,62] [info] Assigned new job execution tokens to the following groups: 875acd29: 1
+	[2025-03-03 15:15:24,65] [[38;5;220mwarn[0m] Localization via hard link has failed: /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-annotate_cells/inputs/-12691654/expr.h5ad -> /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/execution/expr.h5ad: Operation not permitted
+	[2025-03-03 15:15:24,69] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2mcd8a2ba9[0msalmon_quantification.annotate_cells:NA:1]: [38;5;5mmkdir -p "orig_fastqss"
+	mv /cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-annotate_cells/inputs/-801345468/Sample_X_S1_L001_R1_001.fastq.gz "./orig_fastqss/"
+	mv /cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-annotate_cells/inputs/-801345468/Sample_X_S1_L001_R2_001.fastq.gz "./orig_fastqss/"
+	# Command to annotate cells in the AnnData file
+	/opt/annotate_cells.py 10x_v2 /cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-annotate_cells/inputs/-12691654/expr.h5ad "./orig_fastqss/" --img_dir default_value --metadata_dir default_value --metadata_json default_value[0m
+	[2025-03-03 15:15:24,69] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2mcd8a2ba9[0msalmon_quantification.annotate_cells:NA:1]: executing: # make sure there is no preexisting Docker CID file
+	rm -f /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-annotate_cells/execution/docker_cid
+	# run as in the original configuration without --rm flag (will remove later)
+	docker run \
+	  --cidfile /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-annotate_cells/execution/docker_cid \
+	  -i \
+	   \
+	  --entrypoint /bin/bash \
+	  -v /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-annotate_cells:/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-annotate_cells:delegated \
+	  hubmap/scrna-analysis@sha256:2e4b8dab0b8e4a236fd4fcd4fa972dcf2c9724d0dcfb280ce5d4a0359dbf5d21 /cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-annotate_cells/execution/script
+	
+	# get the return code (working even if the container was detached)
+	rc=$(docker wait [38;5;5mcat /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-annotate_cells/execution/docker_cid[0m)
+	
+	# remove the container after waiting
+	docker rm [38;5;5mcat /tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-annotate_cells/execution/docker_cid[0m
+	
+	# return exit code
+	exit $rc
+	[2025-03-03 15:15:29,51] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2mcd8a2ba9[0msalmon_quantification.annotate_cells:NA:1]: job id: 23959
+	[2025-03-03 15:15:29,51] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2mcd8a2ba9[0msalmon_quantification.annotate_cells:NA:1]: Status change from - to WaitingForReturnCode
+	[2025-03-03 15:15:30,18] [info] BackgroundConfigAsyncJobExecutionActor [[38;5;2mcd8a2ba9[0msalmon_quantification.annotate_cells:NA:1]: Status change from WaitingForReturnCode to Done
+	[2025-03-03 15:15:31,70] [info] cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49-SubWorkflowActor-SubWorkflow-SalmonQuantificationCall:-1:1 [[38;5;2mcd8a2ba9[0m]: Workflow salmon_quantification complete. Final Outputs:
+	{
+	  "salmon_quantification.genome_build_json": "/tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/execution/genome_build.json",
+	  "salmon_quantification.annotated_h5ad": "/tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-annotate_cells/execution/expr.h5ad",
+	  "salmon_quantification.count_matrix_h5ad": "/tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/execution/expr.h5ad",
+	  "salmon_quantification.raw_count_matrix": "/tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/execution/raw_expr.h5ad"
+	}
+	[2025-03-03 15:15:35,61] [info] WorkflowExecutionActor-875acd29-483b-40b1-bdba-9f7d73c18620 [[38;5;2m875acd29[0m]: Workflow RunSalmonRNAseq complete. Final Outputs:
+	{
+	  "RunSalmonRNAseq.reports": ["/tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-fastqc/shard-0/execution/glob-95d152ee65b39eba6639dfd5e0e281ce/Sample_X_S1_L001_R1_001_fastqc.html", "/tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-fastqc/shard-1/execution/glob-95d152ee65b39eba6639dfd5e0e281ce/Sample_X_S1_L001_R2_001_fastqc.html"],
+	  "RunSalmonRNAseq.raw_count_matrix": "/tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/execution/raw_expr.h5ad",
+	  "RunSalmonRNAseq.count_matrix_h5ad": "/tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/execution/expr.h5ad",
+	  "RunSalmonRNAseq.genome_build_json": "/tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/execution/genome_build.json"
+	}
+	[2025-03-03 15:15:39,51] [info] WorkflowManagerActor: Workflow actor for 875acd29-483b-40b1-bdba-9f7d73c18620 completed with status 'Succeeded'. The workflow will be removed from the workflow store.
+	[2025-03-03 15:16:16,44] [info] SingleWorkflowRunnerActor workflow finished with status 'Succeeded'.
+	{
+	  "outputs": {
+	    "RunSalmonRNAseq.raw_count_matrix": "/tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/execution/raw_expr.h5ad",
+	    "RunSalmonRNAseq.reports": ["/tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-fastqc/shard-0/execution/glob-95d152ee65b39eba6639dfd5e0e281ce/Sample_X_S1_L001_R1_001_fastqc.html", "/tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-fastqc/shard-1/execution/glob-95d152ee65b39eba6639dfd5e0e281ce/Sample_X_S1_L001_R2_001_fastqc.html"],
+	    "RunSalmonRNAseq.count_matrix_h5ad": "/tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/execution/expr.h5ad",
+	    "RunSalmonRNAseq.genome_build_json": "/tmp/14735195406116159585/cromwell-executions/RunSalmonRNAseq/875acd29-483b-40b1-bdba-9f7d73c18620/call-SalmonQuantificationCall/salmon_quantification/cd8a2ba9-17c4-41f0-96aa-1c9c2e254a49/call-alevin_to_anndata/execution/genome_build.json"
+	  },
+	  "id": "875acd29-483b-40b1-bdba-9f7d73c18620"
+	}
+	[2025-03-03 15:16:19,62] [info] Workflow polling stopped
+	[2025-03-03 15:16:19,63] [info] 0 workflows released by cromid-6959f62
+	[2025-03-03 15:16:19,63] [info] Shutting down WorkflowStoreActor - Timeout = 5 seconds
+	[2025-03-03 15:16:19,63] [info] Shutting down WorkflowLogCopyRouter - Timeout = 5 seconds
+	[2025-03-03 15:16:19,64] [info] Shutting down JobExecutionTokenDispenser - Timeout = 5 seconds
+	[2025-03-03 15:16:19,64] [info] JobExecutionTokenDispenser stopped
+	[2025-03-03 15:16:19,65] [info] Aborting all running workflows.
+	[2025-03-03 15:16:19,65] [info] WorkflowStoreActor stopped
+	[2025-03-03 15:16:19,65] [info] WorkflowLogCopyRouter stopped
+	[2025-03-03 15:16:19,65] [info] Shutting down WorkflowManagerActor - Timeout = 3600 seconds
+	[2025-03-03 15:16:19,65] [info] WorkflowManagerActor: All workflows finished
+	[2025-03-03 15:16:19,65] [info] WorkflowManagerActor stopped
+	[2025-03-03 15:16:20,01] [info] Connection pools shut down
+	[2025-03-03 15:16:20,01] [info] Shutting down SubWorkflowStoreActor - Timeout = 1800 seconds
+	[2025-03-03 15:16:20,01] [info] Shutting down JobStoreActor - Timeout = 1800 seconds
+	[2025-03-03 15:16:20,01] [info] Shutting down CallCacheWriteActor - Timeout = 1800 seconds
+	[2025-03-03 15:16:20,01] [info] SubWorkflowStoreActor stopped
+	[2025-03-03 15:16:20,01] [info] Shutting down ServiceRegistryActor - Timeout = 1800 seconds
+	[2025-03-03 15:16:20,01] [info] Shutting down DockerHashActor - Timeout = 1800 seconds
+	[2025-03-03 15:16:20,01] [info] Shutting down IoProxy - Timeout = 1800 seconds
+	[2025-03-03 15:16:20,01] [info] CallCacheWriteActor Shutting down: 0 queued messages to process
+	[2025-03-03 15:16:20,01] [info] CallCacheWriteActor stopped
+	[2025-03-03 15:16:20,01] [info] WriteMetadataActor Shutting down: 0 queued messages to process
+	[2025-03-03 15:16:20,01] [info] KvWriteActor Shutting down: 0 queued messages to process
+	[2025-03-03 15:16:20,02] [info] JobStoreActor stopped
+	[2025-03-03 15:16:20,02] [info] IoProxy stopped
+	[2025-03-03 15:16:20,02] [info] ServiceRegistryActor stopped
+	[2025-03-03 15:16:20,03] [info] DockerHashActor stopped
+	[2025-03-03 15:16:20,06] [info] Shutting down connection pool: curAllocated=0 idleQueues.size=0 waitQueue.size=0 maxWaitQueueLimit=256 closed=false
+	[2025-03-03 15:16:20,06] [info] Shutting down connection pool: curAllocated=0 idleQueues.size=0 waitQueue.size=0 maxWaitQueueLimit=256 closed=false
+	[2025-03-03 15:16:20,06] [info] Shutting down connection pool: curAllocated=1 idleQueues.size=1 waitQueue.size=0 maxWaitQueueLimit=256 closed=false
+	[2025-03-03 15:16:20,07] [info] Database closed
+	[2025-03-03 15:16:20,07] [info] Stream materializer shut down
+	[2025-03-03 15:16:20,07] [info] WDL HTTP import resolver closed

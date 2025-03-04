@@ -162,6 +162,8 @@ task salmon {
 
     runtime {
         docker: "hubmap/salmon-grch38:latest"
+        memory: "28G"
+        cpu: "4"
     }
 }
 
@@ -191,7 +193,6 @@ task alevin_to_anndata {
         docker: "hubmap/scrna-analysis:latest"
     }
 }
-
 
 
 task annotate_cells {
