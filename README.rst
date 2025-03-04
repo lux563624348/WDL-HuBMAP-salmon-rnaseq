@@ -31,6 +31,7 @@ Afterward, clone this repository and enter, and invoke the pipeline as::
 
 To avoid docker images error, highly recommend you to download in advance by:: 
     docker pull hubmap/salmon-grch38:latest
+    
     >= 28GB RAM is required.   
 Salmon quantification step contributes highest memory usage due to inclusion of the entire GRCh38 reference genome as
 decoy sequences in the quantification index. See
