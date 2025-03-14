@@ -4,7 +4,7 @@
     "id": "lux563624348/hubmapconsortium-salmon-rnaseq/hubmap-salmon-rnaseq/3",
     "label": "scRNA-seq pipeline using Salmon and Alevin",
     "$namespaces": {
-        "sbg": "https://sevenbridges.com"
+        "sbg": "https://www.psc.edu/"
     },
     "inputs": [
         {
