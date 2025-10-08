@@ -1,0 +1,349 @@
+{
+    "a_galaxy_workflow": "true",
+    "annotation": "",
+    "comments": [],
+    "format-version": "0.1",
+    "name": "HuBMAP scRNA-seq Workflow using Salmon and Alevin",
+    "steps": {
+        "0": {
+            "annotation": "",
+            "content_id": null,
+            "errors": null,
+            "id": 0,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "",
+                    "name": "Sample_X_S1_L001_R1_001.fastq.gz"
+                }
+            ],
+            "label": "Sample_X_S1_L001_R1_001.fastq.gz",
+            "name": "Input dataset",
+            "outputs": [],
+            "position": {
+                "left": 10,
+                "top": 10
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": false, \"tag\": null}",
+            "tool_version": null,
+            "type": "data_input",
+            "uuid": "15bdfc2c-b4a0-4915-a202-7a76431b9a7a",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "1": {
+            "annotation": "",
+            "content_id": null,
+            "errors": null,
+            "id": 1,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "",
+                    "name": "Sample_X_S1_L001_R2_001.fastq.gz"
+                }
+            ],
+            "label": "Sample_X_S1_L001_R2_001.fastq.gz",
+            "name": "Input dataset",
+            "outputs": [],
+            "position": {
+                "left": 10,
+                "top": 130
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": false, \"tag\": null}",
+            "tool_version": null,
+            "type": "data_input",
+            "uuid": "f4c74dfb-a385-4cee-960c-152fa4309b36",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "2": {
+            "annotation": "",
+            "content_id": "hubmap_scrna_fastqc",
+            "errors": null,
+            "id": 2,
+            "input_connections": {
+                "fastq": {
+                    "id": 0,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "HuBMAP scRNA FastQC",
+            "outputs": [
+                {
+                    "name": "fastqc_html",
+                    "type": "html"
+                },
+                {
+                    "name": "fastqc_zip",
+                    "type": "zip"
+                }
+            ],
+            "position": {
+                "left": 230,
+                "top": 10
+            },
+            "post_job_actions": {},
+            "tool_id": "hubmap_scrna_fastqc",
+            "tool_state": "{\"__input_ext\": \"fastqsanger.gz\", \"chromInfo\": \"/tmp/tmp1qmwut9p/galaxy-dev/tool-data/shared/ucsc/chrom/?.len\", \"fastq\": null, \"threads\": \"1\", \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.0",
+            "type": "tool",
+            "uuid": "e155bf23-5820-44e0-99d6-6069136527c1",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "3": {
+            "annotation": "",
+            "content_id": "hubmap_scrna_fastqc",
+            "errors": null,
+            "id": 3,
+            "input_connections": {
+                "fastq": {
+                    "id": 1,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "HuBMAP scRNA FastQC",
+            "outputs": [
+                {
+                    "name": "fastqc_html",
+                    "type": "html"
+                },
+                {
+                    "name": "fastqc_zip",
+                    "type": "zip"
+                }
+            ],
+            "position": {
+                "left": 230,
+                "top": 130
+            },
+            "post_job_actions": {},
+            "tool_id": "hubmap_scrna_fastqc",
+            "tool_state": "{\"__input_ext\": \"fastqsanger.gz\", \"chromInfo\": \"/tmp/tmp1qmwut9p/galaxy-dev/tool-data/shared/ucsc/chrom/?.len\", \"fastq\": null, \"threads\": \"1\", \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.0",
+            "type": "tool",
+            "uuid": "b14ea682-627c-43ec-9b1c-dddbf1764e0e",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "4": {
+            "annotation": "",
+            "content_id": "hubmap_adjust_barcodes",
+            "errors": null,
+            "id": 4,
+            "input_connections": {
+                "orig_R1_fastq": {
+                    "id": 0,
+                    "output_name": "output"
+                },
+                "orig_R2_fastq": {
+                    "id": 1,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "HuBMAP Adjust Barcodes",
+            "outputs": [
+                {
+                    "name": "adj_R1_fastq",
+                    "type": "fastq.gz"
+                },
+                {
+                    "name": "adj_R2_fastq",
+                    "type": "fastq.gz"
+                },
+                {
+                    "name": "metadata_json",
+                    "type": "json"
+                }
+            ],
+            "position": {
+                "left": 230,
+                "top": 250
+            },
+            "post_job_actions": {},
+            "tool_id": "hubmap_adjust_barcodes",
+            "tool_state": "{\"__input_ext\": \"fastqsanger.gz\", \"assay\": \"10x_v2\", \"chromInfo\": \"/tmp/tmp1qmwut9p/galaxy-dev/tool-data/shared/ucsc/chrom/?.len\", \"orig_R1_fastq\": null, \"orig_R2_fastq\": null, \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.0",
+            "type": "tool",
+            "uuid": "85c035c1-72fb-4477-b535-1d85bbc59afb",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "5": {
+            "annotation": "",
+            "content_id": "hubmap_trim_reads",
+            "errors": null,
+            "id": 5,
+            "input_connections": {
+                "orig_R1_fastq": {
+                    "id": 0,
+                    "output_name": "output"
+                },
+                "orig_R2_fastq": {
+                    "id": 1,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "HuBMAP Trim Reads",
+            "outputs": [
+                {
+                    "name": "trim_R1_fastq",
+                    "type": "fastq.gz"
+                },
+                {
+                    "name": "trim_R2_fastq",
+                    "type": "fastq.gz"
+                }
+            ],
+            "position": {
+                "left": 230,
+                "top": 370
+            },
+            "post_job_actions": {},
+            "tool_id": "hubmap_trim_reads",
+            "tool_state": "{\"__input_ext\": \"fastqsanger.gz\", \"assay\": \"10x_v2\", \"chromInfo\": \"/tmp/tmp1qmwut9p/galaxy-dev/tool-data/shared/ucsc/chrom/?.len\", \"orig_R1_fastq\": null, \"orig_R2_fastq\": null, \"threads\": \"1\", \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.0",
+            "type": "tool",
+            "uuid": "de06f491-9643-4568-be81-2eb6d2a7119b",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "6": {
+            "annotation": "",
+            "content_id": "hubmap_salmon_human",
+            "errors": null,
+            "id": 6,
+            "input_connections": {
+                "orig_R1_fastq": {
+                    "id": 0,
+                    "output_name": "output"
+                },
+                "orig_R2_fastq": {
+                    "id": 1,
+                    "output_name": "output"
+                },
+                "trim_R1_fastq": {
+                    "id": 5,
+                    "output_name": "trim_R1_fastq"
+                },
+                "trim_R2_fastq": {
+                    "id": 5,
+                    "output_name": "trim_R2_fastq"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "HuBMAP Salmon Alevin (human)",
+            "outputs": [
+                {
+                    "name": "salmon_output",
+                    "type": "tar"
+                }
+            ],
+            "position": {
+                "left": 450,
+                "top": 10
+            },
+            "post_job_actions": {},
+            "tool_id": "hubmap_salmon_human",
+            "tool_state": "{\"__input_ext\": \"fastq.gz\", \"assay\": \"10x_v2\", \"chromInfo\": \"/tmp/tmp1qmwut9p/galaxy-dev/tool-data/shared/ucsc/chrom/?.len\", \"expected_cell_count\": null, \"keep_all_barcodes\": false, \"orig_R1_fastq\": null, \"orig_R2_fastq\": null, \"threads\": \"6\", \"trim_R1_fastq\": null, \"trim_R2_fastq\": null, \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.0",
+            "type": "tool",
+            "uuid": "4bc6f0a9-d2e8-4e5f-b21f-d52a8d3537c9",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "7": {
+            "annotation": "",
+            "content_id": "hubmap_alevin_to_anndata",
+            "errors": null,
+            "id": 7,
+            "input_connections": {
+                "salmon_tar": {
+                    "id": 6,
+                    "output_name": "salmon_output"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "HuBMAP Alevin to AnnData",
+            "outputs": [
+                {
+                    "name": "expr_h5ad",
+                    "type": "h5ad"
+                },
+                {
+                    "name": "raw_expr_h5ad",
+                    "type": "h5ad"
+                },
+                {
+                    "name": "genome_build_json",
+                    "type": "json"
+                }
+            ],
+            "position": {
+                "left": 670,
+                "top": 10
+            },
+            "post_job_actions": {},
+            "tool_id": "hubmap_alevin_to_anndata",
+            "tool_state": "{\"__input_ext\": \"tar\", \"assay\": \"10x_v2\", \"chromInfo\": \"/tmp/tmp1qmwut9p/galaxy-dev/tool-data/shared/ucsc/chrom/?.len\", \"organism\": null, \"salmon_tar\": null, \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.0",
+            "type": "tool",
+            "uuid": "e86b4c4e-2dad-426b-b347-fed310e595eb",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "8": {
+            "annotation": "",
+            "content_id": "hubmap_scvelo_analysis",
+            "errors": null,
+            "id": 8,
+            "input_connections": {
+                "spliced_h5ad_file": {
+                    "id": 7,
+                    "output_name": "expr_h5ad"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "HuBMAP scVelo Analysis",
+            "outputs": [
+                {
+                    "name": "annotated_h5ad_file",
+                    "type": "h5ad"
+                },
+                {
+                    "name": "embedding_grid_plot",
+                    "type": "pdf"
+                }
+            ],
+            "position": {
+                "left": 890,
+                "top": 10
+            },
+            "post_job_actions": {},
+            "tool_id": "hubmap_scvelo_analysis",
+            "tool_state": "{\"__input_ext\": \"h5ad\", \"assay\": \"10x_v2\", \"chromInfo\": \"/tmp/tmp1qmwut9p/galaxy-dev/tool-data/shared/ucsc/chrom/?.len\", \"spliced_h5ad_file\": null, \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.0",
+            "type": "tool",
+            "uuid": "a6a6c0f4-e97e-4058-b4c1-29a00a2534fe",
+            "when": null,
+            "workflow_outputs": []
+        }
+    },
+    "tags": [],
+    "uuid": "dba627e0-43f6-42be-bb7f-a7245d17384f",
+    "version": 0
+}

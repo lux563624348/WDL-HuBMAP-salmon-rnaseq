@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tool id="hubmap_compute_qc_metrics" name="HuBMAP Compute QC Metrics" version="1.0.0">
+    <description>Compute quality-control metrics for single-cell data</description>
+    <requirements>
+        <container type="docker">hubmap/scrna-analysis:latest</container>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+working="\$(pwd)" &&
+tar -xf "$salmon_tar" -C "\${working}" &&
+ln -s "$primary_matrix" ".h5ad" &&
+ln -s "$secondary_matrix" "secondary.h5ad" &&
+ls -lR "\$working" &&
+export NUMBA_DISABLE_JIT=1 &&
+/opt/compute_qc_metrics.py "$assay" "$primary_matrix" "$secondary_matrix" "./salmon_out" &&
+cp "\${working}/qc_results.hdf5" "$scanpy_qc_results" &&
+cp "\${working}/qc_results.json" "$qc_metrics"
+    ]]></command>
+    <inputs>
+        <param name="assay" type="select" label="Assay">
+            <option value="10x_v2">10x Chromium v2</option>
+            <option value="10x_v3">10x Chromium v3</option>
+            <option value="10x_v2_sn">10x Chromium v2 nuclei</option>
+            <option value="10x_v3_sn">10x Chromium v3 nuclei</option>
+            <option value="snareseq">SNARE-seq</option>
+            <option value="sciseq">sci-RNA-seq</option>
+            <option value="slideseq">Slide-seq</option>
+            <option value="visium-ff">Visium FF</option>
+            <option value="multiome_10x">10x Multiome</option>
+            <option value="xenium">Xenium</option>
+            <option value="cosmx">CosMx</option>
+        </param>
+        <param name="primary_matrix" type="data" format="h5ad,h5mu" label="alevin_to_anndata/expr_h5ad"/>
+        <param name="secondary_matrix" type="data" format="h5ad,h5mu" label="filtered_data_h5ad"/>
+        <param name="salmon_tar" type="data" format="tar" label="Salmon Alevin output tar"/>
+    </inputs>
+    <outputs>
+        <data name="scanpy_qc_results" format="hdf5" label="Scanpy QC results"/>
+        <data name="qc_metrics" format="json" label="Summary QC metrics"/>
+    </outputs>
+    <help><![CDATA[
+Calculates QC summaries from AnnData or MuData inputs and Salmon run metadata.
+    ]]></help>
+</tool>

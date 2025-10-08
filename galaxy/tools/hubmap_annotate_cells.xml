@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tool id="hubmap_annotate_cells" name="HuBMAP Annotate Cells" version="1.0.0">
+    <description>Apply assay-specific (sciseq & slideseq) barcode annotations to Salmon outputs</description>
+    <requirements>
+        <container type="docker">hubmap/scrna-analysis:latest</container>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+working="\$(pwd)" && 
+ln -s "$orig_R1_fastq" "\${working}/orig_R1.fastq.gz" &&
+ln -s "$orig_R2_fastq" "\${working}/orig_R2.fastq.gz" &&
+ln -s "$h5ad_file" "\${working}/expr.h5ad" &&
+/opt/annotate_cells.py "$assay" "$h5ad_file" "\${working}" --metadata_json "$metadata_json" &&
+ls -lR "\$working" &&
+cp "\${working}/expr.h5ad" "$annotated_h5ad"
+    ]]></command>
+    <inputs>
+        <param name="assay" type="select" label="Assay">
+            <option value="10x_v2">10x Chromium v2</option>
+            <option value="10x_v3">10x Chromium v3</option>
+            <option value="10x_v2_sn">10x Chromium v2 nuclei</option>
+            <option value="10x_v3_sn">10x Chromium v3 nuclei</option>
+            <option value="snareseq">SNARE-seq</option>
+            <option value="sciseq">sci-RNA-seq</option>
+            <option value="slideseq">Slide-seq</option>
+            <option value="visium-ff">Visium FF</option>
+            <option value="multiome_10x">10x Multiome</option>
+            <option value="xenium">Xenium</option>
+            <option value="cosmx">CosMx</option>
+        </param>
+        <param name="h5ad_file" type="data" format="h5ad" label="Input AnnData file"/>
+        <param name="orig_R1_fastq" format="fastq,fastq.gz,fastq.bz2" type="data" label="Original R1 FASTQ file" />
+        <param name="orig_R2_fastq" format="fastq,fastq.gz,fastq.bz2" type="data" label="Original R2 FASTQ file" />
+        <param name="img_dir" type="data" format="directory" optional="true" label="Image directory"/>
+        <param name="metadata_dir" type="data" format="directory" optional="true" label="Metadata directory"/>
+        <param name="metadata_json" type="data" format="json" optional="true" label="genome_build_json"/>
+    </inputs>
+    <outputs>
+        <data name="annotated_h5ad" format="h5ad" label="Annotated AnnData"/>
+    </outputs>
+    <help><![CDATA[
+Runs the HuBMAP annotation script to attach metadata and spatial context to the quantification results.
+    ]]></help>
+</tool>

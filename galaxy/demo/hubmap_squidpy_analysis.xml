@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tool id="hubmap_squidpy_analysis" name="HuBMAP Squidpy Analysis" version="1.0.0">
+    <description>Perform spatial single-cell analysis with Squidpy</description>
+    <requirements>
+        <container type="docker">hubmap/squidpy-analysis:latest</container>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+cmd=(/opt/squidpy_entry_point.py "$assay" "$h5ad_file") &&
+#if $img_dir
+cmd+=("$img_dir") &&
+#end if
+"\${cmd[@]}"
+    ]]></command>
+    <inputs>
+        <param name="assay" type="select" label="Assay">
+            <option value="10x_v2">10x Chromium v2</option>
+            <option value="10x_v3">10x Chromium v3</option>
+            <option value="10x_v2_sn">10x Chromium v2 nuclei</option>
+            <option value="10x_v3_sn">10x Chromium v3 nuclei</option>
+            <option value="snareseq">SNARE-seq</option>
+            <option value="sciseq">sci-RNA-seq</option>
+            <option value="slideseq">Slide-seq</option>
+            <option value="visium-ff">Visium FF</option>
+            <option value="multiome_10x">10x Multiome</option>
+            <option value="xenium">Xenium</option>
+            <option value="cosmx">CosMx</option>
+        </param>
+        <param name="h5ad_file" type="data" format="h5ad" label="Input AnnData file"/>
+        <param name="img_dir" type="data" format="directory" optional="true" label="Image directory"/>
+    </inputs>
+    <outputs>
+        <data name="squidpy_annotated_h5ad" format="h5ad" from_work_dir="squidpy_annotated.h5ad" label="Squidpy annotated AnnData" optional="true"/>
+        <data name="neighborhood_enrichment_plot" format="pdf" from_work_dir="neighborhood_enrichment.pdf" label="Neighborhood enrichment" optional="true"/>
+        <data name="co_occurrence_plot" format="pdf" from_work_dir="co_occurrence.pdf" label="Co-occurrence" optional="true"/>
+        <data name="spatial_plot" format="pdf" from_work_dir="spatial_scatter.pdf" label="Spatial scatter" optional="true"/>
+        <data name="interaction_matrix_plot" format="pdf" from_work_dir="interaction_matrix.pdf" label="Interaction matrix" optional="true"/>
+        <data name="centrality_scores_plot" format="pdf" from_work_dir="centrality_scores.pdf" label="Centrality scores" optional="true"/>
+        <data name="ripley_plot" format="pdf" from_work_dir="ripley.pdf" label="Ripley plot" optional="true"/>
+    </outputs>
+    <help><![CDATA[
+Runs the Squidpy spatial analysis workflow for assays that produce spatial coordinates.
+    ]]></help>
+</tool>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tool id="hubmap_scanpy_analysis" name="HuBMAP Scanpy Analysis" version="1.0.0">
+    <description>Run Scanpy secondary analysis on AnnData matrices</description>
+    <requirements>
+        <container type="docker">hubmap/scrna-analysis:latest</container>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+working="\$(pwd)" && 
+/opt/scanpy_entry_point.py ${assay} "$h5ad_file" &&
+cp "\${working}/secondary_analysis.h5ad" "$filtered_data_h5ad" &&
+cp "\${working}/dispersion_plot.pdf" "$dispersion_plot" &&
+cp "\${working}/umap_by_leiden_cluster.pdf" "$umap_plot" &&
+cp "\${working}/spatial_pos_by_leiden_cluster.pdf" "$spatial_plot" &&
+cp "\${working}/umap_embedding_density.pdf" "$umap_density_plot" &&
+cp "\${working}/marker_genes_by_cluster_t_test.pdf" "$marker_gene_plot_t_test" &&
+cp "\${working}/marker_genes_by_cluster_logreg.pdf" "$marker_gene_plot_logreg" &&
+tar -C "\${working}" -cvf "./scanpy_secondary_analysis.tar" "./" &&
+cp "\${working}/scanpy_secondary_analysis.tar" "$scanpy_secondary_analysis"
+    ]]></command>
+    <inputs>
+        <param name="assay" type="select" label="Assay">
+            <option value="10x_v2">10x Chromium v2</option>
+            <option value="10x_v3">10x Chromium v3</option>
+            <option value="10x_v2_sn">10x Chromium v2 nuclei</option>
+            <option value="10x_v3_sn">10x Chromium v3 nuclei</option>
+            <option value="snareseq">SNARE-seq</option>
+            <option value="sciseq">sci-RNA-seq</option>
+            <option value="slideseq">Slide-seq</option>
+            <option value="visium-ff">Visium FF</option>
+            <option value="multiome_10x">10x Multiome</option>
+            <option value="xenium">Xenium</option>
+            <option value="cosmx">CosMx</option>
+        </param>
+        <param name="h5ad_file" type="data" format="h5ad" label="Input AnnData file"/>
+    </inputs>
+    <outputs>
+        <data name="filtered_data_h5ad" format="h5ad" from_work_dir="secondary_analysis.h5ad" label="Filtered AnnData"/>
+        <data name="dispersion_plot" format="pdf" from_work_dir="dispersion_plot.pdf" label="Highly variable genes plot"/>
+        <data name="umap_plot" format="pdf" from_work_dir="umap_by_leiden_cluster.pdf" label="UMAP by cluster"/>
+        <data name="spatial_plot" format="pdf" from_work_dir="spatial_pos_by_leiden_cluster.pdf" label="Spatial clusters" optional="true"/>
+        <data name="umap_density_plot" format="pdf" from_work_dir="umap_embedding_density.pdf" label="UMAP density"/>
+        <data name="marker_gene_plot_t_test" format="pdf" from_work_dir="marker_genes_by_cluster_t_test.pdf" label="Marker genes (t-test)"/>
+        <data name="marker_gene_plot_logreg" format="pdf" from_work_dir="marker_genes_by_cluster_logreg.pdf" label="Marker genes (logreg)"/>
+    </outputs>
+    <help><![CDATA[
+Executes the Scanpy pipeline to perform filtering, dimensionality reduction, clustering, and plotting of scRNA-seq data.
+    ]]></help>
+</tool>
